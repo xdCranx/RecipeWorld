@@ -1,0 +1,23 @@
+# macOS system files
+.DS_Store
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.xml
+*.ipr
+*.iws
+out/
+
+# Gradle files
+.gradle/
+build/
+
+# Flutter/Dart files
+.dart_tool/
+.packages
+.pub/
+/build/
+
+# Docker files
+docker-compose.override.yml
