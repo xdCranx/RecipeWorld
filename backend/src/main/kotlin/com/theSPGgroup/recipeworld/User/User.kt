@@ -5,7 +5,8 @@ import java.util.UUID
 @Entity
 @Table
 data class User(
-    @Id @GeneratedValue(strategy = GenerationType.UUID) val id: UUID,
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    val id: UUID = UUID.randomUUID(),
     var username: String,
     var password: String
 )
