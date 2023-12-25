@@ -7,17 +7,29 @@ import java.util.UUID
 @Service
 class UserService(@Autowired val userRepository: UserRepository) {
 
-    fun getUsers(): List<User> {
+    fun getAllUsers(): List<User> {
         return userRepository.findAll()
     }
 
-    fun addNewUser(user: User) {
-        val userByUsername:User? = userRepository.findUserByUsername(user.username)
+    fun logInAuthUser(userCredentials: UserCredentials): String {
+        val user = userRepository.findUserByUsername(userCredentials.username)
+            ?: throw NoSuchElementException("User ${userCredentials.username} not found")
 
-        if(userByUsername != null){
-            throw IllegalStateException("Username already taken")
+        if (user.username == userCredentials.username &&
+            user.password != userCredentials.password) {
+            throw IllegalStateException("Invalid password")
         }
-        userRepository.save(user )
+        else {
+            return user.id.toString()
+            }
+    }
+
+    fun addUser(user: User) {
+        val usernameExists:Boolean = userRepository.existsUserByUsername(user.username)
+        if (usernameExists) {
+            throw IllegalArgumentException("User with username ${user.username} already exists.")
+        }
+        userRepository.save(user)
     }
 
     fun deleteUser(userId: String) {
@@ -28,7 +40,6 @@ class UserService(@Autowired val userRepository: UserRepository) {
             if (userById != null) {
                 if(userById.id == UUID.fromString(userId)) {
                     userRepository.delete(userById)
-                    println("Deleted")
                 } else {
                     throw IllegalStateException("ID mismatch")
                 }

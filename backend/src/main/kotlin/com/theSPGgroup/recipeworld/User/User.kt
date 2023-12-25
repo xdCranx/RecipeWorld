@@ -7,6 +7,6 @@ import java.util.UUID
 data class User(
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     val id: UUID = UUID.randomUUID(),
-    var username: String,
-    var password: String
+    val username: String,
+    val password: String
 )
