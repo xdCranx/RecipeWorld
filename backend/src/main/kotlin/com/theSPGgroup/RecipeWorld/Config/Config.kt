@@ -63,6 +63,9 @@ class Config(
                 comment = "So bad, diarrhea guaranteed!",
                 recipe = recipe2
             )
+            reviewRepository.saveAll(
+                listOf(review1, review2)
+            )
         }
     }
 }
