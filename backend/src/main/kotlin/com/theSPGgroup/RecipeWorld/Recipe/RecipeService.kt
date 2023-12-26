@@ -1,7 +1,10 @@
 package com.theSPGgroup.RecipeWorld.Recipe
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import java.util.*
 
 
 @Service
@@ -9,6 +12,26 @@ class RecipeService(@Autowired val recipeRepository: RecipeRepository) {
 
     fun getRecipes(): List<Recipe> {
         return recipeRepository.findAll()
+    }
+
+    fun getRecipeById(recipeId: Long): ResponseEntity<Any> {
+        val recipe: Optional<Recipe> = recipeRepository.findById(recipeId)
+
+        return if (recipe.isPresent) {
+            ResponseEntity.ok(recipe.get())
+        } else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("Recipe with id $recipeId not found")
+        }
+    }
+
+    fun getRecipeByTitle(title: String): ResponseEntity<Any> {
+        val recipes: List<Recipe> = recipeRepository.findByTitleIgnoreCaseContaining(title)
+
+        return if (recipes.isNotEmpty()) {
+            ResponseEntity.ok(recipes)
+        } else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("No recipes found with title: $title")
+        }
     }
 
     fun addNewRecipe(recipe: Recipe) {
@@ -25,7 +48,6 @@ class RecipeService(@Autowired val recipeRepository: RecipeRepository) {
 
             if (recipeById != null) {
                 recipeRepository.delete(recipeById)
-                println("Recipe Deleted")
             } else {
                 throw IllegalStateException("Recipe not found")
             }

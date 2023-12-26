@@ -12,6 +12,7 @@ data class Recipe(
 
     val title: String,
     val description: String,
+    val date: LocalDateTime
 
 //    @ManyToOne
 //    @JoinColumn(name = "category_id")
@@ -21,5 +22,4 @@ data class Recipe(
 //    @JoinColumn(name = "author_id")
 //    val author: Author,
 
-    val date: LocalDateTime
 )
