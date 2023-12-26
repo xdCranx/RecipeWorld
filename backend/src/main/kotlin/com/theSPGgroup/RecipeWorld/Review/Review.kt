@@ -5,6 +5,7 @@ import com.theSPGgroup.RecipeWorld.Recipe.Recipe
 import jakarta.persistence.*
 
 @Entity
+@Table
 data class Review(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
