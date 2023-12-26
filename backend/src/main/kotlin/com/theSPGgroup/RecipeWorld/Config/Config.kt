@@ -4,6 +4,8 @@ import com.theSPGgroup.RecipeWorld.User.UserRepository
 import com.theSPGgroup.RecipeWorld.User.User
 import com.theSPGgroup.RecipeWorld.Recipe.Recipe
 import com.theSPGgroup.RecipeWorld.Recipe.RecipeRepository
+import com.theSPGgroup.RecipeWorld.Review.Review
+import com.theSPGgroup.RecipeWorld.Review.ReviewRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,7 +13,11 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Configuration
-class Config(private val userRepository: UserRepository, private val recipeRepository: RecipeRepository) {
+class Config(
+    private val userRepository: UserRepository,
+    private val recipeRepository: RecipeRepository,
+    private val reviewRepository: ReviewRepository
+) {
 
     @Bean
     fun commandLineRunner(): CommandLineRunner {
@@ -34,16 +40,29 @@ class Config(private val userRepository: UserRepository, private val recipeRepos
             val recipe1 = Recipe(
                 title = "Chocolate Cake",
                 description = "Delicious chocolate cake recipe",
-                date = LocalDateTime.now()
+                date = LocalDateTime.now(),
+                author = user1
             )
-
             val recipe2 = Recipe(
                 title = "Spaghetti Bolognese",
                 description = "Classic spaghetti bolognese recipe",
-                date = LocalDateTime.now()
+                date = LocalDateTime.now(),
+                author = user2
+            )
+            recipeRepository.saveAll(
+                listOf(recipe1, recipe2)
             )
 
-            recipeRepository.saveAll(listOf(recipe1, recipe2))
+            val review1 = Review(
+                user = user1,
+                comment = "Very good, gave me butterflies!",
+                recipe = recipe1
+            )
+            val review2 = Review(
+                user = user2,
+                comment = "So bad, diarrhea guaranteed!",
+                recipe = recipe2
+            )
         }
     }
 }
