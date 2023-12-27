@@ -45,36 +45,6 @@ class Config(
                 listOf(user1, user2)
             )
 
-            val recipe1 = Recipe(
-                title = "Chocolate Cake",
-                description = "Delicious chocolate cake recipe",
-                date = LocalDateTime.now(),
-                author = user1
-            )
-            val recipe2 = Recipe(
-                title = "Spaghetti Bolognese",
-                description = "Classic spaghetti bolognese recipe",
-                date = LocalDateTime.now(),
-                author = user2
-            )
-            recipeRepository.saveAll(
-                listOf(recipe1, recipe2)
-            )
-
-            val review1 = Review(
-                user = user1,
-                comment = "Very good, gave me butterflies!",
-                recipe = recipe1
-            )
-            val review2 = Review(
-                user = user2,
-                comment = "So bad, diarrhea guaranteed!",
-                recipe = recipe2
-            )
-            reviewRepository.saveAll(
-                listOf(review1, review2)
-            )
-
             val ingredient1 = Ingredient(
                 name = "Flour",
                 unit = IngredientUnit.GRAMS
@@ -116,6 +86,38 @@ class Config(
             )
             categoryRepository.saveAll(
                 listOf(category1, category2, category3, category4, category5)
+            )
+
+            val recipe1 = Recipe(
+                title = "Chocolate Cake",
+                description = "Delicious chocolate cake recipe",
+                date = LocalDateTime.now(),
+                author = user1,
+                category = category4
+            )
+            val recipe2 = Recipe(
+                title = "Spaghetti Bolognese",
+                description = "Classic spaghetti bolognese recipe",
+                date = LocalDateTime.now(),
+                author = user2,
+                category = category3
+            )
+            recipeRepository.saveAll(
+                listOf(recipe1, recipe2)
+            )
+
+            val review1 = Review(
+                user = user1,
+                comment = "Very good, gave me butterflies!",
+                recipe = recipe1
+            )
+            val review2 = Review(
+                user = user2,
+                comment = "So bad, diarrhea guaranteed!",
+                recipe = recipe2
+            )
+            reviewRepository.saveAll(
+                listOf(review1, review2)
             )
 
         }

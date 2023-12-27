@@ -1,5 +1,6 @@
 package com.theSPGgroup.RecipeWorld.Recipe
 
+import com.theSPGgroup.RecipeWorld.Category.Category
 import com.theSPGgroup.RecipeWorld.User.User
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -15,9 +16,9 @@ data class Recipe(
     val description: String,
     val date: LocalDateTime,
 
-//    @ManyToOne
-//    @JoinColumn(name = "category_id")
-//    val category: Category,
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    val category: Category,
 
     @ManyToOne
     @JoinColumn(name = "author_id")
