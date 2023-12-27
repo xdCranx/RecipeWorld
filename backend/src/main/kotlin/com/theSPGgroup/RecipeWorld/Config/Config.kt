@@ -1,5 +1,8 @@
 package com.theSPGgroup.RecipeWorld.Config
 
+import com.theSPGgroup.RecipeWorld.Ingredients.Ingredient
+import com.theSPGgroup.RecipeWorld.Ingredients.IngredientUnit
+import com.theSPGgroup.RecipeWorld.Ingredients.IngredientsRepository
 import com.theSPGgroup.RecipeWorld.User.UserRepository
 import com.theSPGgroup.RecipeWorld.User.User
 import com.theSPGgroup.RecipeWorld.Recipe.Recipe
@@ -16,7 +19,8 @@ import java.util.*
 class Config(
     private val userRepository: UserRepository,
     private val recipeRepository: RecipeRepository,
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val ingredientsRepository: IngredientsRepository
 ) {
 
     @Bean
@@ -66,6 +70,31 @@ class Config(
             reviewRepository.saveAll(
                 listOf(review1, review2)
             )
+
+            val ingredient1 = Ingredient(
+                name = "Flour",
+                unit = IngredientUnit.GRAMS
+            )
+            val ingredient2 = Ingredient(
+                name = "Sugar",
+                unit = IngredientUnit.GRAMS
+            )
+            val ingredient3 = Ingredient(
+                name = "Milk",
+                unit = IngredientUnit.MILLILITERS
+            )
+            val ingredient4 = Ingredient(
+                name = "Bread",
+                unit = IngredientUnit.SLICE
+            )
+            val ingredient5 = Ingredient(
+                name = "Cheese",
+                unit = IngredientUnit.SLICE
+            )
+            ingredientsRepository.saveAll(
+                listOf(ingredient1, ingredient2, ingredient3, ingredient4, ingredient5)
+            )
+
         }
     }
 }
