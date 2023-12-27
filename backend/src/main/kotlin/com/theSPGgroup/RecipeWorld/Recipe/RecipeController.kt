@@ -18,7 +18,7 @@ class RecipeController(@Autowired val recipeService: RecipeService) {
         return recipeService.getRecipeById(recipeId)
     }
 
-    @GetMapping("/{title}")
+    @GetMapping("/title/{title}")
     fun getRecipeByTitle(@PathVariable("title") recipeTitle: String): ResponseEntity<Any> {
         return recipeService.getRecipeByTitle(recipeTitle)
     }
