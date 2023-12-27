@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 data class Recipe(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    val id: Long = 0,
 
     val title: String,
     val description: String,
@@ -22,5 +22,8 @@ data class Recipe(
     @ManyToOne
     @JoinColumn(name = "author_id")
     val author: User,
+
+    @OneToMany(mappedBy = "recipe")
+    val recipeIngredients: MutableSet<RecipeIngredient> = mutableSetOf()
 
     )

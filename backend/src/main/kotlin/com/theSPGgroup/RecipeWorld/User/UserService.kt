@@ -1,11 +1,13 @@
 package com.theSPGgroup.RecipeWorld.User
 
+import com.theSPGgroup.RecipeWorld.Recipe.RecipeRepository
+import jakarta.persistence.EntityNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-class UserService(@Autowired val userRepository: UserRepository) {
+class UserService(@Autowired val userRepository: UserRepository, @Autowired val recipeRepository: RecipeRepository) {
 
     fun getAllUsers(): List<User> {
         return userRepository.findAll()
@@ -51,5 +53,16 @@ class UserService(@Autowired val userRepository: UserRepository) {
         } catch (e: Exception) {
             throw IllegalStateException("An error occurred: ${e.message}")
         }
+    }
+
+    fun addRecipeToFav(userId:String, recipeId: String) {
+        val user = userRepository.findById(UUID.fromString(userId))
+            .orElseThrow {EntityNotFoundException("User not found") }
+
+        val recipe = recipeRepository.findById(recipeId.toLong())
+            .orElseThrow { EntityNotFoundException("Recipe not found") }
+
+        user.favouriteRecipes.add(recipe)
+        userRepository.save(user)
     }
 }

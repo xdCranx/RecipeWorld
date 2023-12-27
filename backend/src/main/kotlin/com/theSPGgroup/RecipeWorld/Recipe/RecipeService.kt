@@ -15,7 +15,7 @@ class RecipeService(@Autowired val recipeRepository: RecipeRepository) {
     }
 
     fun getRecipeById(recipeId: Long): ResponseEntity<Any> {
-        val recipe: Optional<Recipe> = recipeRepository.findById(recipeId)
+        val recipe: Optional<Recipe> = recipeRepository.findRecipeById(recipeId)
 
         return if (recipe.isPresent) {
             ResponseEntity.ok(recipe.get())
