@@ -1,5 +1,8 @@
 package com.theSPGgroup.RecipeWorld.Config
 
+import com.theSPGgroup.RecipeWorld.Category.Category
+import com.theSPGgroup.RecipeWorld.Category.CategoryName
+import com.theSPGgroup.RecipeWorld.Category.CategoryRepository
 import com.theSPGgroup.RecipeWorld.Ingredients.Ingredient
 import com.theSPGgroup.RecipeWorld.Ingredients.IngredientUnit
 import com.theSPGgroup.RecipeWorld.Ingredients.IngredientsRepository
@@ -20,7 +23,8 @@ class Config(
     private val userRepository: UserRepository,
     private val recipeRepository: RecipeRepository,
     private val reviewRepository: ReviewRepository,
-    private val ingredientsRepository: IngredientsRepository
+    private val ingredientsRepository: IngredientsRepository,
+    private val categoryRepository: CategoryRepository,
 ) {
 
     @Bean
@@ -93,6 +97,25 @@ class Config(
             )
             ingredientsRepository.saveAll(
                 listOf(ingredient1, ingredient2, ingredient3, ingredient4, ingredient5)
+            )
+
+            val category1 = Category(
+                name = CategoryName.DINNER
+            )
+            val category2 = Category(
+                name = CategoryName.DRINK
+            )
+            val category3 = Category(
+                name = CategoryName.LUNCH
+            )
+            val category4 = Category(
+                name = CategoryName.DESSERT
+            )
+            val category5 = Category(
+                name = CategoryName.BREAKFAST
+            )
+            categoryRepository.saveAll(
+                listOf(category1, category2, category3, category4, category5)
             )
 
         }
