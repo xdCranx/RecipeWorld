@@ -24,7 +24,6 @@ data class Recipe(
     @JoinColumn(name = "author_id")
     val author: User,
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", cascade = [CascadeType.ALL], orphanRemoval = true)
     val recipeIngredients: MutableSet<RecipeIngredient> = mutableSetOf()
-
-    )
+)

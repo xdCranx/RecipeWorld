@@ -59,7 +59,7 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
         val user = userRepository.findById(UUID.fromString(userId))
             .orElseThrow {EntityNotFoundException("User not found") }
 
-        val recipe = recipeRepository.findById(recipeId.toLong())
+        val recipe = recipeRepository.findRecipeById(recipeId.toLong())
             .orElseThrow { EntityNotFoundException("Recipe not found") }
 
         user.favouriteRecipes.add(recipe)

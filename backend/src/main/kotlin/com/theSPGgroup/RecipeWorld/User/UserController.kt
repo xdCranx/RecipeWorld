@@ -1,5 +1,6 @@
 package com.theSPGgroup.RecipeWorld.User
 
+import jakarta.persistence.EntityNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -40,6 +41,21 @@ class UserController(@Autowired val userService: UserService) {
     @DeleteMapping("delete")
     fun deleteUser(@RequestParam("id") userId:String):ResponseEntity<Any>{
         userService.deleteUser(userId)
+        return ResponseEntity.ok(HttpStatus.OK)
+    }
+
+    @PostMapping("add-favorite-recipe")
+    fun addRecipeToFav(
+        @RequestParam("userId") userId: String,
+        @RequestParam("recipeId") recipeId: String
+    ): ResponseEntity<Any> {
+        try {
+            userService.addRecipeToFav(userId, recipeId)
+        } catch (ex: EntityNotFoundException) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, ex.message)
+        } catch (ex: Exception) {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.message)
+        }
         return ResponseEntity.ok(HttpStatus.OK)
     }
 }

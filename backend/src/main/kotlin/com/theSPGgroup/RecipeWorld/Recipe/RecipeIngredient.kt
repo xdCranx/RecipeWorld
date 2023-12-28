@@ -17,5 +17,5 @@ data class RecipeIngredient (
     @JoinColumn(name = "ingredient_id")
     val ingredient: Ingredient,
 
-    val quantity: Int
+    val quantity: Float
 )
