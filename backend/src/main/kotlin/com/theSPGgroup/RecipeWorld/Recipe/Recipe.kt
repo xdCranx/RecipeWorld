@@ -15,6 +15,7 @@ data class Recipe(
     val title: String,
     val description: String,
     val date: LocalDateTime,
+    val prepTime: Int,
 
     @ManyToOne
     @JoinColumn(name = "category_id")

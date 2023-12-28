@@ -9,6 +9,7 @@ import com.theSPGgroup.RecipeWorld.Ingredients.IngredientsRepository
 import com.theSPGgroup.RecipeWorld.User.UserRepository
 import com.theSPGgroup.RecipeWorld.User.User
 import com.theSPGgroup.RecipeWorld.Recipe.Recipe
+import com.theSPGgroup.RecipeWorld.Recipe.RecipeIngredient
 import com.theSPGgroup.RecipeWorld.Recipe.RecipeRepository
 import com.theSPGgroup.RecipeWorld.Review.Review
 import com.theSPGgroup.RecipeWorld.Review.ReviewRepository
@@ -93,15 +94,26 @@ class Config(
                 description = "Delicious chocolate cake recipe",
                 date = LocalDateTime.now(),
                 author = user1,
-                category = category4
+                category = category4,
+                prepTime = 15,
             )
             val recipe2 = Recipe(
                 title = "Spaghetti Bolognese",
                 description = "Classic spaghetti bolognese recipe",
                 date = LocalDateTime.now(),
                 author = user2,
-                category = category3
+                category = category3,
+                prepTime = 30,
             )
+
+//            val recipeIngredient1 = RecipeIngredient(recipe = recipe1, ingredient = ingredient1, quantity = 1f)
+//            val recipeIngredient2 = RecipeIngredient(recipe =  recipe1, ingredient =  ingredient2, quantity = 1f)
+//            val recipeIngredient3 = RecipeIngredient(recipe =  recipe2, ingredient =  ingredient3, quantity = 2f)
+//            val recipeIngredient4 = RecipeIngredient(recipe =  recipe2, ingredient =  ingredient4, quantity = 40f)
+//            val recipeIngredient5 = RecipeIngredient(recipe =  recipe2, ingredient =  ingredient5, quantity = 2f)
+//
+//            recipe1.recipeIngredients.addAll(setOf(recipeIngredient1, recipeIngredient2))
+//            recipe2.recipeIngredients.addAll(setOf(recipeIngredient3, recipeIngredient4, recipeIngredient5))
             recipeRepository.saveAll(
                 listOf(recipe1, recipe2)
             )
