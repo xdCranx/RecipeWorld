@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 import java.util.*
 
 
@@ -42,12 +43,28 @@ class RecipeService(
         }
     }
 
-    fun addNewRecipe(recipe: Recipe) {
+    fun addNewRecipe(recipe: Recipe, userId: String, categoryId: Long): ResponseEntity<Any> {
         if (recipe.title.isBlank()) {
             throw IllegalArgumentException("Recipe title cannot be empty")
         }
 
-        recipeRepository.save(recipe)
+        val user = userRepository.findById(UUID.fromString(userId))
+            .orElseThrow { EntityNotFoundException("User not found") }
+
+        val category = categoryRepository.findById(categoryId)
+            .orElseThrow { EntityNotFoundException("Category not found") }
+
+        val recipeSend = Recipe(
+            title = recipe.title,
+            description = recipe.description,
+            author = user,
+            category = category,
+            date = LocalDateTime.now(),
+            prepTime = recipe.prepTime,
+        )
+        recipeRepository.save(recipeSend)
+
+        return ResponseEntity.ok("Added succesfully")
     }
 
     fun deleteRecipe(recipeId: Long) {

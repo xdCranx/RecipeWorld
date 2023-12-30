@@ -1,23 +1,17 @@
 package com.theSPGgroup.RecipeWorld.Review
 
-import com.theSPGgroup.RecipeWorld.Recipe.Recipe
-import com.theSPGgroup.RecipeWorld.User.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
 
 @RestController
-@RequestMapping("/api/reviews")
+@RequestMapping("/api/review")
 class ReviewController(@Autowired val reviewService: ReviewService) {
 
     @PostMapping("/add")
-    fun addReview(
-        @RequestBody user: User,
-        @RequestBody recipe: Recipe,
-        @RequestBody comment: String
-    ): ResponseEntity<Any> {
-        return reviewService.addReview(user, recipe, comment)
+    fun addReview(@RequestBody reviewRequest: ReviewRequest): ResponseEntity<Any> {
+        return reviewService.addReview(reviewRequest.userId, reviewRequest.recipeId, reviewRequest.comment)
     }
 
     @GetMapping("/recipe/{recipeId}")
@@ -31,7 +25,7 @@ class ReviewController(@Autowired val reviewService: ReviewService) {
     }
 
     @GetMapping("/user/{userId}")
-    fun getReviewsByUser(@PathVariable("userId") userId: UUID): List<Review> {
-        return reviewService.getReviewsByUser(userId)
+    fun getReviewsByUser(@PathVariable("userId") userId: String): List<Review> {
+        return reviewService.getReviewsByUser(UUID.fromString(userId))
     }
 }

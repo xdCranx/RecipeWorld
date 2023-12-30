@@ -19,11 +19,11 @@ data class Recipe(
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    val category: Category,
+    var category: Category?,
 
     @ManyToOne
     @JoinColumn(name = "author_id")
-    val author: User,
+    var author: User?,
 
     @OneToMany(mappedBy = "recipe", cascade = [CascadeType.ALL], orphanRemoval = true)
     val recipeIngredients: MutableSet<RecipeIngredient> = mutableSetOf()

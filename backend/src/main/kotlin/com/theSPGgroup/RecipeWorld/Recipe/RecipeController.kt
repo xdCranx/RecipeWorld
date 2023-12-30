@@ -26,8 +26,8 @@ class RecipeController(@Autowired val recipeService: RecipeService) {
     }
 
     @PostMapping
-    fun addNewRecipe(@RequestBody recipe: Recipe) {
-        recipeService.addNewRecipe(recipe)
+    fun addNewRecipe(@RequestBody recipeRequest: RecipeRequest): ResponseEntity<Any> {
+        return recipeService.addNewRecipe(recipeRequest.recipe, recipeRequest.userId, recipeRequest.categoryId)
     }
 
     @DeleteMapping("{id}")

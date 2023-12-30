@@ -9,7 +9,6 @@ import com.theSPGgroup.RecipeWorld.Ingredients.IngredientsRepository
 import com.theSPGgroup.RecipeWorld.User.UserRepository
 import com.theSPGgroup.RecipeWorld.User.User
 import com.theSPGgroup.RecipeWorld.Recipe.Recipe
-import com.theSPGgroup.RecipeWorld.Recipe.RecipeIngredient
 import com.theSPGgroup.RecipeWorld.Recipe.RecipeRepository
 import com.theSPGgroup.RecipeWorld.Review.Review
 import com.theSPGgroup.RecipeWorld.Review.ReviewRepository
@@ -107,13 +106,14 @@ class Config(
             )
 
 //            val recipeIngredient1 = RecipeIngredient(recipe = recipe1, ingredient = ingredient1, quantity = 1f)
-//            val recipeIngredient2 = RecipeIngredient(recipe =  recipe1, ingredient =  ingredient2, quantity = 1f)
-//            val recipeIngredient3 = RecipeIngredient(recipe =  recipe2, ingredient =  ingredient3, quantity = 2f)
-//            val recipeIngredient4 = RecipeIngredient(recipe =  recipe2, ingredient =  ingredient4, quantity = 40f)
-//            val recipeIngredient5 = RecipeIngredient(recipe =  recipe2, ingredient =  ingredient5, quantity = 2f)
+//            val recipeIngredient2 = RecipeIngredient(recipe = recipe1, ingredient = ingredient2, quantity = 1f)
+//            val recipeIngredient3 = RecipeIngredient(recipe = recipe2, ingredient = ingredient3, quantity = 2f)
+//            val recipeIngredient4 = RecipeIngredient(recipe = recipe2, ingredient = ingredient4, quantity = 40f)
+//            val recipeIngredient5 = RecipeIngredient(recipe = recipe2, ingredient = ingredient5, quantity = 2f)
 //
 //            recipe1.recipeIngredients.addAll(setOf(recipeIngredient1, recipeIngredient2))
 //            recipe2.recipeIngredients.addAll(setOf(recipeIngredient3, recipeIngredient4, recipeIngredient5))
+
             recipeRepository.saveAll(
                 listOf(recipe1, recipe2)
             )
@@ -121,16 +121,15 @@ class Config(
             val review1 = Review(
                 user = user1,
                 comment = "Very good, gave me butterflies!",
-                recipe = recipe1
+                recipe = recipe2
             )
             val review2 = Review(
                 user = user2,
                 comment = "So bad, diarrhea guaranteed!",
-                recipe = recipe2
+                recipe = recipe1
             )
-            reviewRepository.saveAll(
-                listOf(review1, review2)
-            )
+
+            reviewRepository.saveAll(listOf(review1, review2))
 
         }
     }

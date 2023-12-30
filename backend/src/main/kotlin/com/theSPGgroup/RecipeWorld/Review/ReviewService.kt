@@ -1,7 +1,9 @@
 package com.theSPGgroup.RecipeWorld.Review
 
-import com.theSPGgroup.RecipeWorld.Recipe.Recipe
-import com.theSPGgroup.RecipeWorld.User.User
+
+import com.theSPGgroup.RecipeWorld.Recipe.RecipeRepository
+import com.theSPGgroup.RecipeWorld.User.UserRepository
+import jakarta.persistence.EntityNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -9,15 +11,26 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class ReviewService(@Autowired val reviewRepository: ReviewRepository) {
+class ReviewService(
+    @Autowired val reviewRepository: ReviewRepository,
+    @Autowired val userRepository: UserRepository,
+    @Autowired val recipeRepository: RecipeRepository
+) {
 
-    fun addReview(user: User, recipe: Recipe, comment: String): ResponseEntity<Any> {
+    fun addReview(userId: String, recipeId: String, comment: String): ResponseEntity<Any> {
+        val user = userRepository.findById(UUID.fromString(userId))
+            .orElseThrow { EntityNotFoundException("User not found") }
+
+        val recipe = recipeRepository.findRecipeById(recipeId.toLong())
+            .orElseThrow { EntityNotFoundException("Recipe not found") }
+
         val review = Review(
             user = user,
             recipe = recipe,
             comment = comment
         )
         reviewRepository.save(review)
+
         return ResponseEntity.ok("Review added successfully")
     }
 
