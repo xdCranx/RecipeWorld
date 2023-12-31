@@ -2,6 +2,8 @@ package com.theSPGgroup.RecipeWorld.Recipe
 
 import com.theSPGgroup.RecipeWorld.Category.CategoryName
 import com.theSPGgroup.RecipeWorld.Category.CategoryRepository
+import com.theSPGgroup.RecipeWorld.Ingredients.IngredientsRepository
+import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredient
 import com.theSPGgroup.RecipeWorld.User.UserRepository
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,6 +19,7 @@ class RecipeService(
     @Autowired val recipeRepository: RecipeRepository,
     @Autowired val categoryRepository: CategoryRepository,
     @Autowired val userRepository: UserRepository,
+    @Autowired val ingredientsRepository: IngredientsRepository,
 ) {
 
     fun getAllRecipes(): List<Recipe> {
@@ -43,28 +46,45 @@ class RecipeService(
         }
     }
 
-    fun addNewRecipe(recipe: Recipe, userId: String, categoryId: Long): ResponseEntity<Any> {
-        if (recipe.title.isBlank()) {
+    fun addNewRecipe(newRecipe: RecipeRequest): ResponseEntity<Any> {
+        if (newRecipe.recipeTitle.isBlank()) {
             throw IllegalArgumentException("Recipe title cannot be empty")
         }
 
-        val user = userRepository.findById(UUID.fromString(userId))
+        if (newRecipe.recipeIngredientsIds.isEmpty()) {
+            throw IllegalArgumentException("Recipe must have ingredients")
+        }
+
+        val user = userRepository.findById(UUID.fromString(newRecipe.userId))
             .orElseThrow { EntityNotFoundException("User not found") }
 
-        val category = categoryRepository.findById(categoryId)
+        val category = categoryRepository.findById(newRecipe.categoryId)
             .orElseThrow { EntityNotFoundException("Category not found") }
 
+        val ingredients = ingredientsRepository.findAllByIdIn(newRecipe.recipeIngredientsIds)
+
+        if(ingredients.isEmpty()){
+            throw EntityNotFoundException("Could not find ingredients")
+        }
+
         val recipeSend = Recipe(
-            title = recipe.title,
-            description = recipe.description,
+            title = newRecipe.recipeTitle,
+            description = newRecipe.recipeDescription,
             author = user,
             category = category,
             date = LocalDateTime.now(),
-            prepTime = recipe.prepTime,
+            prepTime = newRecipe.recipePrepTime,
         )
         recipeRepository.save(recipeSend)
 
-        return ResponseEntity.ok("Added succesfully")
+        val newRecipeIngredientsList = ingredients.map{
+            ingredient -> RecipeIngredient(
+                recipe = recipeSend,
+                ingredient = ingredient,
+                quantity = )
+        }
+
+        return ResponseEntity.ok("Added successfully")
     }
 
     fun deleteRecipe(recipeId: Long) {

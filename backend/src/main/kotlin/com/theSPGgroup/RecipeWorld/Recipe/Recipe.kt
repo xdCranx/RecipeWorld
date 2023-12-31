@@ -1,6 +1,7 @@
 package com.theSPGgroup.RecipeWorld.Recipe
 
 import com.theSPGgroup.RecipeWorld.Category.Category
+import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredient
 import com.theSPGgroup.RecipeWorld.User.User
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -19,12 +20,12 @@ data class Recipe(
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    var category: Category?,
+    var category: Category,
 
     @ManyToOne
     @JoinColumn(name = "author_id")
-    var author: User?,
+    var author: User,
 
     @OneToMany(mappedBy = "recipe", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val recipeIngredients: MutableSet<RecipeIngredient> = mutableSetOf()
+    val recipeIngredients: MutableList<RecipeIngredient> = mutableListOf()
 )

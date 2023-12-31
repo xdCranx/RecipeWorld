@@ -15,7 +15,7 @@ class RecipeController(@Autowired val recipeService: RecipeService) {
         return recipeService.getAllRecipes()
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     fun getRecipeById(@PathVariable("id") recipeId: Long): ResponseEntity<Any> {
         return recipeService.getRecipeById(recipeId)
     }
@@ -27,7 +27,7 @@ class RecipeController(@Autowired val recipeService: RecipeService) {
 
     @PostMapping
     fun addNewRecipe(@RequestBody recipeRequest: RecipeRequest): ResponseEntity<Any> {
-        return recipeService.addNewRecipe(recipeRequest.recipe, recipeRequest.userId, recipeRequest.categoryId)
+        return recipeService.addNewRecipe(recipeRequest)
     }
 
     @DeleteMapping("{id}")

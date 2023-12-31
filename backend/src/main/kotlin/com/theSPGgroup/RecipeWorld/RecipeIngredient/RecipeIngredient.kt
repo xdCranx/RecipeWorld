@@ -1,6 +1,7 @@
-package com.theSPGgroup.RecipeWorld.Recipe
+package com.theSPGgroup.RecipeWorld.RecipeIngredient
 
 import com.theSPGgroup.RecipeWorld.Ingredients.Ingredient
+import com.theSPGgroup.RecipeWorld.Recipe.Recipe
 import jakarta.persistence.*
 
 @Entity
