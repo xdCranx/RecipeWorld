@@ -22,25 +22,25 @@ class RecipeService(
     @Autowired val ingredientsRepository: IngredientsRepository,
 ) {
 
-    fun getAllRecipes(): List<Recipe> {
-        return recipeRepository.findAll()
+    fun getAllRecipes(): List<RecipeDTO> {
+        return recipeRepository.findAll().map { RecipeDTOMapper.mapRecipeToRecipeDTO(it) }
     }
 
     fun getRecipeById(recipeId: Long): ResponseEntity<Any> {
         val recipe: Optional<Recipe> = recipeRepository.findRecipeById(recipeId)
 
         return if (recipe.isPresent) {
-            ResponseEntity.ok(recipe.get())
+            ResponseEntity.ok(recipe.map { RecipeDTOMapper.mapRecipeToRecipeDTO(it) })
         } else {
             ResponseEntity.status(HttpStatus.NOT_FOUND).body("Recipe with id $recipeId not found")
         }
     }
 
-    fun getRecipesByTitle(title: String): ResponseEntity<List<Recipe>> {
+    fun getRecipesByTitle(title: String): ResponseEntity<List<RecipeDTO>> {
         val recipes: List<Recipe> = recipeRepository.findByTitleIgnoreCaseContaining(title)
 
         return if (recipes.isNotEmpty()) {
-            ResponseEntity.ok(recipes)
+            ResponseEntity.ok(recipes.map { RecipeDTOMapper.mapRecipeToRecipeDTO(it) })
         } else {
             ResponseEntity.status(HttpStatus.NOT_FOUND).body(emptyList())
         }
@@ -81,7 +81,7 @@ class RecipeService(
             ingredient -> RecipeIngredient(
                 recipe = recipeSend,
                 ingredient = ingredient,
-                quantity = )
+                quantity = 15f)
         }
 
         return ResponseEntity.ok("Added successfully")
@@ -101,29 +101,35 @@ class RecipeService(
         }
     }
 
-    fun getRecipesByCategory(categoryName: CategoryName): List<Recipe> {
+    fun getRecipesByCategory(categoryName: CategoryName): List<RecipeDTO> {
         val category = categoryRepository.findByName(categoryName)
             ?: throw EntityNotFoundException("Category not found")
-        return recipeRepository.findByCategory(category)
+        return recipeRepository.findByCategory(category).map { RecipeDTOMapper.mapRecipeToRecipeDTO(it) }
     }
 
-    fun getRecipesByPrepTime(prepTime: Int): List<Recipe> {
+    fun getRecipesByPrepTime(prepTime: Int): List<RecipeDTO> {
         if (prepTime < 0) {
             throw IllegalArgumentException("Preparation time cannot be negative")
         }
-        return recipeRepository.findByPrepTimeLessThanEqual(prepTime)
+        return recipeRepository.findByPrepTimeLessThanEqual(prepTime).map { RecipeDTOMapper.mapRecipeToRecipeDTO(it) }
     }
 
-    fun getRecipesByIngredient(ingredient: String): List<Recipe> {
+    fun getRecipesByIngredient(ingredient: String): List<RecipeDTO> {
         if (ingredient.isBlank()) {
             throw IllegalArgumentException("Ingredient name cannot be blank")
         }
-        return recipeRepository.findByRecipeIngredientsIngredientNameIgnoreCase(ingredient)
+        return recipeRepository.findByRecipeIngredientsIngredientNameIgnoreCase(ingredient).map { RecipeDTOMapper.mapRecipeToRecipeDTO(it) }
     }
 
-    fun getRecipesByUserFavorites(userId: UUID): List<Recipe> {
+    fun getRecipesByUserFavorites(userId: UUID): List<RecipeDTO> {
         val user = userRepository.findById(userId)
             .orElseThrow { EntityNotFoundException("User not found for ID: $userId") }
-        return user.favouriteRecipes.toList()
+        return user.favouriteRecipes.toList().map { RecipeDTOMapper.mapRecipeToRecipeDTO(it) }
+    }
+
+    fun getRecipesByUser(userId: UUID): List<RecipeDTO> {
+        val user = userRepository.findById(userId)
+            .orElseThrow { EntityNotFoundException("User not found for ID: $userId") }
+        return recipeRepository.findByAuthor(user).map { RecipeDTOMapper.mapRecipeToRecipeDTO(it) }
     }
 }

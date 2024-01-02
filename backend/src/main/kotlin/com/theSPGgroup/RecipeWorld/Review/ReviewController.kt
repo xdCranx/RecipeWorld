@@ -1,5 +1,7 @@
 package com.theSPGgroup.RecipeWorld.Review
 
+import com.theSPGgroup.RecipeWorld.Recipe.RecipeDTOMapper
+import com.theSPGgroup.RecipeWorld.UserDTOMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -15,8 +17,15 @@ class ReviewController(@Autowired val reviewService: ReviewService) {
     }
 
     @GetMapping("/recipe/{recipeId}")
-    fun getReviewsByRecipe(@PathVariable("recipeId") recipeId: Long): List<Review> {
-        return reviewService.getReviewsByRecipe(recipeId)
+    fun getReviewsByRecipe(@PathVariable("recipeId") recipeId: Long): List<ReviewDTO> {
+        return reviewService.getReviewsByRecipe(recipeId).map { review ->
+            ReviewDTO(
+                review.id,
+                UserDTOMapper.mapUserToUserDTO(review.user),
+                RecipeDTOMapper.mapRecipeToRecipeDTO(review.recipe),
+                review.comment
+            )
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -25,7 +34,14 @@ class ReviewController(@Autowired val reviewService: ReviewService) {
     }
 
     @GetMapping("/user/{userId}")
-    fun getReviewsByUser(@PathVariable("userId") userId: String): List<Review> {
-        return reviewService.getReviewsByUser(UUID.fromString(userId))
+    fun getReviewsByUser(@PathVariable("userId") userId: String): List<ReviewDTO> {
+        return reviewService.getReviewsByUser(UUID.fromString(userId)).map { review ->
+            ReviewDTO(
+                review.id,
+                UserDTOMapper.mapUserToUserDTO(review.user),
+                RecipeDTOMapper.mapRecipeToRecipeDTO(review.recipe),
+                review.comment
+            )
+        }
     }
 }

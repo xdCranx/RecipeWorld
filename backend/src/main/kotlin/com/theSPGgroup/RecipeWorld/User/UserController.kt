@@ -1,16 +1,11 @@
 package com.theSPGgroup.RecipeWorld.User
 
+import com.theSPGgroup.RecipeWorld.UserDTOMapper
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
 
@@ -19,8 +14,8 @@ import org.springframework.web.server.ResponseStatusException
 class UserController(@Autowired val userService: UserService) {
 
     @GetMapping("getall")
-    fun getAllUsers():List<User>{
-        return userService.getAllUsers()
+    fun getAllUsers(): List<UserDTO> {
+        return userService.getAllUsers().map { UserDTOMapper.mapUserToUserDTO(it) }
     }
 
     @PostMapping("register")
@@ -44,18 +39,33 @@ class UserController(@Autowired val userService: UserService) {
         return ResponseEntity.ok(HttpStatus.OK)
     }
 
-    @PostMapping("add-favorite-recipe")
-    fun addRecipeToFav(
-        @RequestParam("userId") userId: String,
-        @RequestParam("recipeId") recipeId: String
+    @PostMapping("/{userId}/favorites/{recipeId}/add")
+    fun addRecipeToFavorites(
+        @PathVariable userId: String,
+        @PathVariable recipeId: String
     ): ResponseEntity<Any> {
         try {
-            userService.addRecipeToFav(userId, recipeId)
+            userService.addRecipeToFavorites(userId, recipeId)
         } catch (ex: EntityNotFoundException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, ex.message)
         } catch (ex: Exception) {
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.message)
         }
-        return ResponseEntity.ok(HttpStatus.OK)
+        return ResponseEntity.ok("Recipe added to favorites successfully")
+    }
+
+    @DeleteMapping("/{userId}/favorites/{recipeId}/remove")
+    fun removeRecipeFromFavorites(
+        @PathVariable userId: String,
+        @PathVariable recipeId: String
+    ): ResponseEntity<Any> {
+        try {
+            userService.removeRecipeFromFavorites(userId, recipeId)
+        } catch (ex: EntityNotFoundException) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, ex.message)
+        } catch (ex: Exception) {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.message)
+        }
+        return ResponseEntity.ok("Recipe removed from favorites successfully")
     }
 }

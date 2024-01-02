@@ -104,6 +104,22 @@ class Config(
                 category = category3,
                 prepTime = 30,
             )
+            val recipe3 = Recipe(
+                title = "Bigos",
+                description = "You gon luv it",
+                date = LocalDateTime.now(),
+                author = user1,
+                category = category4,
+                prepTime = 15,
+            )
+            val recipe4 = Recipe(
+                title = "Schabowy",
+                description = "Mom's like recipe",
+                date = LocalDateTime.now(),
+                author = user1,
+                category = category4,
+                prepTime = 15,
+            )
 
 //            val recipeIngredient1 = RecipeIngredient(recipe = recipe1, ingredient = ingredient1, quantity = 1f)
 //            val recipeIngredient2 = RecipeIngredient(recipe = recipe1, ingredient = ingredient2, quantity = 1f)
@@ -115,7 +131,7 @@ class Config(
 //            recipe2.recipeIngredients.addAll(setOf(recipeIngredient3, recipeIngredient4, recipeIngredient5))
 
             recipeRepository.saveAll(
-                listOf(recipe1, recipe2)
+                listOf(recipe1, recipe2, recipe3, recipe4)
             )
 
             val review1 = Review(

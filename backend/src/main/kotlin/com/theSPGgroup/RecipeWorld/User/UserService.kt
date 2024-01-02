@@ -55,7 +55,7 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
         }
     }
 
-    fun addRecipeToFav(userId:String, recipeId: String) {
+    fun addRecipeToFavorites(userId:String, recipeId: String) {
         val user = userRepository.findById(UUID.fromString(userId))
             .orElseThrow {EntityNotFoundException("User not found") }
 
@@ -63,6 +63,17 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
             .orElseThrow { EntityNotFoundException("Recipe not found") }
 
         user.favouriteRecipes.add(recipe)
+        userRepository.save(user)
+    }
+
+    fun removeRecipeFromFavorites(userId: String, recipeId: String) {
+        val user = userRepository.findById(UUID.fromString(userId))
+            .orElseThrow { EntityNotFoundException("User not found") }
+
+        val recipe = recipeRepository.findById(recipeId.toLong())
+            .orElseThrow { EntityNotFoundException("Recipe not found") }
+
+        user.favouriteRecipes.remove(recipe)
         userRepository.save(user)
     }
 }

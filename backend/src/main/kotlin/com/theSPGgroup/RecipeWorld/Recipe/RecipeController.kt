@@ -11,7 +11,7 @@ import java.util.*
 class RecipeController(@Autowired val recipeService: RecipeService) {
 
     @GetMapping
-    fun getAllRecipes(): List<Recipe> {
+    fun getAllRecipes(): List<RecipeDTO> {
         return recipeService.getAllRecipes()
     }
 
@@ -21,7 +21,7 @@ class RecipeController(@Autowired val recipeService: RecipeService) {
     }
 
     @GetMapping("/title/{title}")
-    fun getRecipeByTitle(@PathVariable("title") recipeTitle: String): ResponseEntity<List<Recipe>> {
+    fun getRecipeByTitle(@PathVariable("title") recipeTitle: String): ResponseEntity<List<RecipeDTO>> {
         return recipeService.getRecipesByTitle(recipeTitle)
     }
 
@@ -36,22 +36,27 @@ class RecipeController(@Autowired val recipeService: RecipeService) {
     }
 
     @GetMapping("/category/{category}")
-    fun getRecipesByCategory(@PathVariable("category") categoryName: CategoryName): List<Recipe> {
+    fun getRecipesByCategory(@PathVariable("category") categoryName: CategoryName): List<RecipeDTO> {
         return recipeService.getRecipesByCategory(categoryName)
     }
 
     @GetMapping("/prep-time/{prepTime}")
-    fun getRecipesByPrepTime(@PathVariable("prepTime") prepTime: Int): List<Recipe> {
+    fun getRecipesByPrepTime(@PathVariable("prepTime") prepTime: Int): List<RecipeDTO> {
         return recipeService.getRecipesByPrepTime(prepTime)
     }
 
     @GetMapping("/ingredient/{ingredient}")
-    fun getRecipesByIngredient(@PathVariable("ingredient") ingredient: String): List<Recipe> {
+    fun getRecipesByIngredient(@PathVariable("ingredient") ingredient: String): List<RecipeDTO> {
         return recipeService.getRecipesByIngredient(ingredient)
     }
 
     @GetMapping("/user-favorites/{userId}")
-    fun getRecipesByUserFavorites(@PathVariable("userId") userId: UUID): List<Recipe> {
+    fun getRecipesByUserFavorites(@PathVariable("userId") userId: UUID): List<RecipeDTO> {
         return recipeService.getRecipesByUserFavorites(userId)
+    }
+
+    @GetMapping("/user-recipes/{userId}")
+    fun getRecipesByUser(@PathVariable("userId") userId: UUID): List<RecipeDTO> {
+        return recipeService.getRecipesByUser(userId)
     }
 }
