@@ -6,7 +6,7 @@ import com.theSPGgroup.RecipeWorld.User.UserDTO
 class UserDTOMapper {
     companion object {
         fun mapUserToUserDTO(user: User): UserDTO {
-            return UserDTO(user.id, user.username, user.favouriteRecipes.map { it.id }.toMutableSet())
+            return UserDTO(user.username)
         }
     }
 }
