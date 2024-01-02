@@ -1,6 +1,5 @@
 package com.theSPGgroup.RecipeWorld.User
 
-import com.theSPGgroup.RecipeWorld.Recipe.Recipe
 import java.util.UUID
 
 data class UserDTO(
