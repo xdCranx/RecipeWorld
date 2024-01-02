@@ -5,6 +5,6 @@ data class RecipeRequest(
     val categoryId: Long,
     val recipeTitle: String,
     val recipeDescription: String,
-    val recipeIngredientsIds: MutableList<Long>,
+    val recipeIngredients: MutableList<Pair<Long, Float>>,
     val recipePrepTime: Int
 )

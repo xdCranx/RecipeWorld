@@ -1,9 +1,12 @@
 package com.theSPGgroup.RecipeWorld.Recipe
 
 import com.theSPGgroup.RecipeWorld.Category.CategoryName
+import jakarta.persistence.EntityNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 import java.util.*
 
 @RestController
@@ -27,7 +30,16 @@ class RecipeController(@Autowired val recipeService: RecipeService) {
 
     @PostMapping
     fun addNewRecipe(@RequestBody recipeRequest: RecipeRequest): ResponseEntity<Any> {
-        return recipeService.addNewRecipe(recipeRequest)
+        try {
+            recipeService.addNewRecipe(recipeRequest)
+        } catch (ex: EntityNotFoundException) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, ex.message)
+        } catch (ex: IllegalArgumentException) {
+            throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, ex.message)
+        } catch(ex: Exception) {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.message)
+        }
+        return ResponseEntity(HttpStatus.CREATED)
     }
 
     @DeleteMapping("{id}")

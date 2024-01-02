@@ -10,6 +10,7 @@ import com.theSPGgroup.RecipeWorld.User.UserRepository
 import com.theSPGgroup.RecipeWorld.User.User
 import com.theSPGgroup.RecipeWorld.Recipe.Recipe
 import com.theSPGgroup.RecipeWorld.Recipe.RecipeRepository
+import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredientService
 import com.theSPGgroup.RecipeWorld.Review.Review
 import com.theSPGgroup.RecipeWorld.Review.ReviewRepository
 import org.springframework.boot.CommandLineRunner
@@ -25,6 +26,7 @@ class Config(
     private val reviewRepository: ReviewRepository,
     private val ingredientsRepository: IngredientsRepository,
     private val categoryRepository: CategoryRepository,
+    private val recipeIngredientService: RecipeIngredientService
 ) {
 
     @Bean
@@ -118,6 +120,14 @@ class Config(
                 listOf(recipe1, recipe2)
             )
 
+            val listOfCCakeIngr: MutableList<Pair<Long,Float>> = mutableListOf(
+                1L to 200F,
+                2L to 10F,
+                3L to 0.5F
+            )
+
+            recipeIngredientService.addRecipeIngredient(recipe1, listOfCCakeIngr)
+            
             val review1 = Review(
                 user = user1,
                 comment = "Very good, gave me butterflies!",
