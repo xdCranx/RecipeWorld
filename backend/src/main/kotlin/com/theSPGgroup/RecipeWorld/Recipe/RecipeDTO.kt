@@ -1,7 +1,7 @@
 package com.theSPGgroup.RecipeWorld.Recipe
 
 import com.theSPGgroup.RecipeWorld.Category.Category
-import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredient
+import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredientDTO
 import com.theSPGgroup.RecipeWorld.User.UserDTO
 import java.time.LocalDateTime
 
@@ -13,5 +13,5 @@ data class RecipeDTO(
     val prepTime: Int,
     val category: Category,
     val author: UserDTO,
-    val recipeIngredients: List<RecipeIngredient>
+    val recipeIngredients: List<RecipeIngredientDTO>
 ) {}

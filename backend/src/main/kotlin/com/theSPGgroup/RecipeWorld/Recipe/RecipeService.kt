@@ -111,7 +111,7 @@ class RecipeService(
     fun getRecipesByUserFavorites(userId: UUID): List<RecipeDTO> {
         val user = userRepository.findById(userId)
             .orElseThrow { EntityNotFoundException("User not found for ID: $userId") }
-        return user.favouriteRecipes.toList().map { RecipeDTOMapper.mapRecipeToRecipeDTO(it) }
+        return user.favoriteRecipes.toList().map { RecipeDTOMapper.mapRecipeToRecipeDTO(it) }
     }
 
     fun getRecipesByUser(userId: UUID): List<RecipeDTO> {

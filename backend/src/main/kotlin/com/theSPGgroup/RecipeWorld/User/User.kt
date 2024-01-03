@@ -1,5 +1,6 @@
 package com.theSPGgroup.RecipeWorld.User
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.theSPGgroup.RecipeWorld.Recipe.Recipe
 import jakarta.persistence.*
 import java.util.UUID
@@ -13,11 +14,11 @@ data class User(
     val username: String,
     val password: String,
 
-    @ManyToMany
+    @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE], fetch = FetchType.LAZY)
     @JoinTable(
-        name = "user_favourites",
+        name = "users_favorites",
         joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "recipe_id")]
-    )
-    val favouriteRecipes: MutableSet<Recipe> = mutableSetOf()
+    )@JsonIgnoreProperties("users") // Avoid circular reference when serializing
+    val favoriteRecipes: MutableSet<Recipe> = mutableSetOf()
 )
