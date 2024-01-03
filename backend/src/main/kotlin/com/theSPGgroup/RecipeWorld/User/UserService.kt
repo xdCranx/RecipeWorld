@@ -37,16 +37,13 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
     fun deleteUser(userId: String) {
         try {
             val id:UUID = UUID.fromString(userId)
-            val userById: User? = userRepository.findUserById(id)
+            val userById: User = userRepository.findById(id)
+                .orElseThrow{ EntityNotFoundException("User not found") }
 
-            if (userById != null) {
-                if(userById.id == UUID.fromString(userId)) {
-                    userRepository.delete(userById)
-                } else {
-                    throw IllegalStateException("ID mismatch")
-                }
+            if(userById.id == UUID.fromString(userId)) {
+                userRepository.delete(userById)
             } else {
-                throw IllegalStateException("Could not find user")
+                throw IllegalStateException("ID mismatch")
             }
         } catch (e: IllegalArgumentException) {
             throw IllegalStateException("Invalid UUID format")
@@ -62,7 +59,10 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
         val recipe = recipeRepository.findRecipeById(recipeId.toLong())
             .orElseThrow { EntityNotFoundException("Recipe not found") }
 
-        user.favouriteRecipes.add(recipe)
+        if(recipe.author.equals(user)){
+            throw IllegalArgumentException("Cannot add your own recipe to favourites")
+        }
+        user.favoriteRecipes.add(recipe)
         userRepository.save(user)
     }
 
@@ -73,7 +73,7 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
         val recipe = recipeRepository.findById(recipeId.toLong())
             .orElseThrow { EntityNotFoundException("Recipe not found") }
 
-        user.favouriteRecipes.remove(recipe)
+        user.favoriteRecipes.remove(recipe)
         userRepository.save(user)
     }
 }

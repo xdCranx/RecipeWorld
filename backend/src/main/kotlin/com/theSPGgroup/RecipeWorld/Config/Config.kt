@@ -26,7 +26,7 @@ class Config(
     private val reviewRepository: ReviewRepository,
     private val ingredientsRepository: IngredientsRepository,
     private val categoryRepository: CategoryRepository,
-    private val recipeIngredientService: RecipeIngredientService
+    private val recipeIngredientService: RecipeIngredientService,
 ) {
 
     @Bean
@@ -43,8 +43,18 @@ class Config(
                 "Major2",
                 "Pajor2"
             )
+            val user3 = User(
+                UUID.randomUUID(),
+                "Major3",
+                "Pajor3"
+            )
+            val user4 = User(
+                UUID.randomUUID(),
+                "Major4",
+                "Pajor4"
+            )
             userRepository.saveAll(
-                listOf(user1, user2)
+                listOf(user1, user2, user3, user4)
             )
 
             val ingredient1 = Ingredient(
@@ -67,8 +77,37 @@ class Config(
                 name = "Cheese",
                 unit = IngredientUnit.SLICE
             )
+            val ingredient6 = Ingredient(
+                name = "Meat",
+                unit = IngredientUnit.GRAMS
+            )
+            val ingredient7 = Ingredient(
+                name = "Water",
+                unit = IngredientUnit.MILLILITERS
+            )
+            val ingredient8 = Ingredient(
+                name = "Pasta",
+                unit = IngredientUnit.GRAMS
+            )
+            val ingredient9 = Ingredient(
+                name = "Tomatoes",
+                unit = IngredientUnit.SLICE
+            )
+            val ingredient10 = Ingredient(
+                name = "Lettuce",
+                unit = IngredientUnit.SLICE
+            )
             ingredientsRepository.saveAll(
-                listOf(ingredient1, ingredient2, ingredient3, ingredient4, ingredient5)
+                listOf(ingredient1,
+                    ingredient2,
+                    ingredient3,
+                    ingredient4,
+                    ingredient5,
+                    ingredient6,
+                    ingredient7,
+                    ingredient8,
+                    ingredient9,
+                    ingredient10, )
             )
 
             val category1 = Category(
@@ -123,15 +162,6 @@ class Config(
                 prepTime = 15,
             )
 
-//            val recipeIngredient1 = RecipeIngredient(recipe = recipe1, ingredient = ingredient1, quantity = 1f)
-//            val recipeIngredient2 = RecipeIngredient(recipe = recipe1, ingredient = ingredient2, quantity = 1f)
-//            val recipeIngredient3 = RecipeIngredient(recipe = recipe2, ingredient = ingredient3, quantity = 2f)
-//            val recipeIngredient4 = RecipeIngredient(recipe = recipe2, ingredient = ingredient4, quantity = 40f)
-//            val recipeIngredient5 = RecipeIngredient(recipe = recipe2, ingredient = ingredient5, quantity = 2f)
-//
-//            recipe1.recipeIngredients.addAll(setOf(recipeIngredient1, recipeIngredient2))
-//            recipe2.recipeIngredients.addAll(setOf(recipeIngredient3, recipeIngredient4, recipeIngredient5))
-
             recipeRepository.saveAll(
                 listOf(recipe1, recipe2, recipe3, recipe4)
             )
@@ -141,9 +171,30 @@ class Config(
                 2L to 10F,
                 3L to 0.5F
             )
-
             recipeIngredientService.addRecipeIngredient(recipe1, listOfCCakeIngr)
-            
+
+            val listOfSpaghettiIngr: MutableList<Pair<Long,Float>> = mutableListOf(
+                5L to 4F,
+                6L to 400F,
+                7L to 500F,
+                8L to 500F,
+                9L to 10F
+            )
+            recipeIngredientService.addRecipeIngredient(recipe2, listOfSpaghettiIngr)
+
+            val listOfBigosIngr: MutableList<Pair<Long,Float>> = mutableListOf(
+                10L to 20F,
+                6L to 500F,
+                4L to 3F
+            )
+            recipeIngredientService.addRecipeIngredient(recipe3, listOfBigosIngr)
+
+            val listOfSchabowyIngr: MutableList<Pair<Long,Float>> = mutableListOf(
+                6L to 1000F
+            )
+            recipeIngredientService.addRecipeIngredient(recipe4, listOfSchabowyIngr)
+
+
             val review1 = Review(
                 user = user1,
                 comment = "Very good, gave me butterflies!",
@@ -156,6 +207,14 @@ class Config(
             )
 
             reviewRepository.saveAll(listOf(review1, review2))
+
+//            userService.addRecipeToFavorites(user1.id.toString(), recipe2.id.toString())
+//            userService.addRecipeToFavorites(user3.id.toString(), recipe1.id.toString())
+//            userService.addRecipeToFavorites(user3.id.toString(), recipe2.id.toString())
+//            userService.addRecipeToFavorites(user4.id.toString(), recipe4.id.toString())
+//            userService.addRecipeToFavorites(user2.id.toString(), recipe3.id.toString())
+
+
 
         }
     }

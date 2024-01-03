@@ -27,5 +27,5 @@ data class Recipe(
     var author: User,
 
     @OneToMany(mappedBy = "recipe", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val recipeIngredients: MutableList<RecipeIngredient> = mutableListOf()
+    val recipeIngredients: MutableList<RecipeIngredient> = mutableListOf(),
 )
