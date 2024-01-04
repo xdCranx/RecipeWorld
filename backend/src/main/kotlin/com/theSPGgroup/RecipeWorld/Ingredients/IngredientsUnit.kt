@@ -9,4 +9,6 @@ enum class IngredientUnit(@JsonValue val unit: String) {
     MILLILITERS("ml"),
     TABLESPOON("tbs"),
     SLICE("slice"),
+    PINCHES("pinches"),
+    NONE("x")
 }
