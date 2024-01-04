@@ -17,11 +17,11 @@ class ReviewService(
     @Autowired val recipeRepository: RecipeRepository
 ) {
 
-    fun addReview(userId: String, recipeId: String, comment: String): ResponseEntity<Any> {
+    fun addReview(userId: String, recipeId: Long, comment: String): ResponseEntity<Any> {
         val user = userRepository.findById(UUID.fromString(userId))
             .orElseThrow { EntityNotFoundException("User not found") }
 
-        val recipe = recipeRepository.findRecipeById(recipeId.toLong())
+        val recipe = recipeRepository.findRecipeById(recipeId)
             .orElseThrow { EntityNotFoundException("Recipe not found") }
 
         val review = Review(

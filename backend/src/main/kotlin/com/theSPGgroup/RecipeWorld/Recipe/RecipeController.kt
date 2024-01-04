@@ -39,12 +39,12 @@ class RecipeController(@Autowired val recipeService: RecipeService) {
         } catch(ex: Exception) {
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.message)
         }
-        return ResponseEntity(HttpStatus.CREATED)
+        return ResponseEntity.ok("Recipe created")
     }
 
     @DeleteMapping("{id}")
-    fun deleteRecipe(@PathVariable("id") recipeId: Long) {
-        recipeService.deleteRecipe(recipeId)
+    fun deleteRecipe(@PathVariable("id") recipeId: Long): ResponseEntity<Any> {
+        return recipeService.deleteRecipe(recipeId)
     }
 
     @GetMapping("/category/{category}")
