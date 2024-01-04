@@ -21,7 +21,7 @@ class ReviewService(
         val user = userRepository.findById(UUID.fromString(userId))
             .orElseThrow { EntityNotFoundException("User not found") }
 
-        val recipe = recipeRepository.findRecipeById(recipeId)
+        val recipe = recipeRepository.findById(recipeId)
             .orElseThrow { EntityNotFoundException("Recipe not found") }
 
         val review = Review(
