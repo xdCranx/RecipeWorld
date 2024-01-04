@@ -19,12 +19,12 @@ class RecipeController(@Autowired val recipeService: RecipeService) {
     }
 
     @GetMapping("{id}")
-    fun getRecipeById(@PathVariable("id") recipeId: Long): ResponseEntity<Any> {
+    fun getRecipeById(@PathVariable("id") recipeId: Long): RecipeDTO {
         return recipeService.getRecipeById(recipeId)
     }
 
     @GetMapping("/title/{title}")
-    fun getRecipeByTitle(@PathVariable("title") recipeTitle: String): ResponseEntity<List<RecipeDTO>> {
+    fun getRecipesByTitle(@PathVariable("title") recipeTitle: String): List<RecipeDTO> {
         return recipeService.getRecipesByTitle(recipeTitle)
     }
 
@@ -43,8 +43,15 @@ class RecipeController(@Autowired val recipeService: RecipeService) {
     }
 
     @DeleteMapping("{id}")
-    fun deleteRecipe(@PathVariable("id") recipeId: Long) {
-        recipeService.deleteRecipe(recipeId)
+    fun deleteRecipe(@PathVariable("id") recipeId: Long): ResponseEntity<Any> {
+        try {
+            recipeService.deleteRecipe(recipeId)
+        } catch (ex: EntityNotFoundException) {
+            throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, ex.message)
+        } catch (ex: Exception) {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.message)
+        }
+        return ResponseEntity.ok("Recipe deleted")
     }
 
     @GetMapping("/category/{category}")
@@ -62,13 +69,8 @@ class RecipeController(@Autowired val recipeService: RecipeService) {
         return recipeService.getRecipesByIngredient(ingredient)
     }
 
-    @GetMapping("/user-favorites/{userId}")
-    fun getRecipesByUserFavorites(@PathVariable("userId") userId: UUID): List<RecipeDTO> {
-        return recipeService.getRecipesByUserFavorites(userId)
-    }
-
-    @GetMapping("/user-recipes/{userId}")
-    fun getRecipesByUser(@PathVariable("userId") userId: UUID): List<RecipeDTO> {
-        return recipeService.getRecipesByUser(userId)
+    @GetMapping("/author/{userId}")
+    fun getRecipesByAuthor(@PathVariable("userId") userId: UUID): List<RecipeDTO> {
+        return recipeService.getRecipesByAuthor(userId)
     }
 }

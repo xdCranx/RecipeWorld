@@ -17,7 +17,7 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
 
     fun logInAuthUser(userCredentials: UserCredentials): String {
         val user = userRepository.findUserByUsername(userCredentials.username)
-            ?: throw NoSuchElementException("User ${userCredentials.username} not found")
+            ?: throw EntityNotFoundException("User ${userCredentials.username} not found")
 
         if (user.username == userCredentials.username &&
             user.password != userCredentials.password) {
@@ -69,7 +69,7 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
         val user = userRepository.findById(UUID.fromString(userId))
             .orElseThrow {EntityNotFoundException("User not found") }
 
-        val recipe = recipeRepository.findRecipeById(recipeId.toLong())
+        val recipe = recipeRepository.findById(recipeId.toLong())
             .orElseThrow { EntityNotFoundException("Recipe not found") }
 
         if(recipe.author.equals(user)){
