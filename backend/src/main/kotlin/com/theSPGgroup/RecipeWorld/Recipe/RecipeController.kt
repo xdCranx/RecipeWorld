@@ -39,7 +39,7 @@ class RecipeController(@Autowired val recipeService: RecipeService) {
         } catch(ex: Exception) {
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.message)
         }
-        return ResponseEntity(HttpStatus.CREATED)
+        return ResponseEntity.ok("Recipe created")
     }
 
     @DeleteMapping("{id}")

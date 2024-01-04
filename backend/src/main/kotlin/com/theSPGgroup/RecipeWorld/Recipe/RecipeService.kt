@@ -44,11 +44,11 @@ class RecipeService(
     }
 
     fun addNewRecipe(newRecipe: RecipeRequest) {
-        if (newRecipe.recipeTitle.isBlank()) {
+        if (newRecipe.title.isBlank()) {
             throw IllegalArgumentException("Recipe title cannot be empty")
         }
 
-        if (newRecipe.recipeIngredients.isEmpty()) {
+        if (newRecipe.ingredients.isEmpty()) {
             throw IllegalArgumentException("Recipe must have ingredients")
         }
 
@@ -59,16 +59,16 @@ class RecipeService(
             .orElseThrow { EntityNotFoundException("Category not found") }
 
         val recipeSend = Recipe(
-            title = newRecipe.recipeTitle,
-            description = newRecipe.recipeDescription,
+            title = newRecipe.title,
+            description = newRecipe.description,
             author = user,
             category = category,
             date = LocalDateTime.now(),
-            prepTime = newRecipe.recipePrepTime,
+            prepTime = newRecipe.prepTime,
         )
         recipeRepository.save(recipeSend)
 
-        recipeIngredientService.addRecipeIngredient(recipeSend, newRecipe.recipeIngredients)
+        recipeIngredientService.addRecipeIngredient(recipeSend, newRecipe.ingredients)
 
     }
 
