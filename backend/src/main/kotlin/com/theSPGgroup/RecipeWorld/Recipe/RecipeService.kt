@@ -3,7 +3,9 @@ package com.theSPGgroup.RecipeWorld.Recipe
 import com.theSPGgroup.RecipeWorld.Category.CategoryName
 import com.theSPGgroup.RecipeWorld.Category.CategoryRepository
 import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredientService
+import com.theSPGgroup.RecipeWorld.Review.ReviewRepository
 import com.theSPGgroup.RecipeWorld.User.UserRepository
+import com.theSPGgroup.RecipeWorld.User.UserService
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -16,7 +18,8 @@ class RecipeService(
     @Autowired val recipeRepository: RecipeRepository,
     @Autowired val categoryRepository: CategoryRepository,
     @Autowired val userRepository: UserRepository,
-    @Autowired val recipeIngredientService: RecipeIngredientService
+    @Autowired val recipeIngredientService: RecipeIngredientService,
+    @Autowired val userService: UserService
 ) {
 
     fun getAllRecipes(): List<RecipeDTO> {
@@ -75,7 +78,9 @@ class RecipeService(
     fun deleteRecipe(recipeId: Long) {
         try {
             val recipeById = recipeRepository.findById(recipeId)
-                .orElseThrow{ EntityNotFoundException("Recipe with id: $recipeId not found") }
+                .orElseThrow { EntityNotFoundException("Recipe with id: $recipeId not found") }
+
+//            userService.removeRecipeFromFavorites(recipeById.author.id.toString(), recipeById.id.toString())
 
             recipeRepository.delete(recipeById)
         } catch (e: Exception) {

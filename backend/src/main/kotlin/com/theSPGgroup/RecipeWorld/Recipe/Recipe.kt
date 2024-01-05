@@ -1,7 +1,9 @@
 package com.theSPGgroup.RecipeWorld.Recipe
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.theSPGgroup.RecipeWorld.Category.Category
 import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredient
+import com.theSPGgroup.RecipeWorld.Review.Review
 import com.theSPGgroup.RecipeWorld.User.User
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -25,9 +27,17 @@ data class Recipe(
     var category: Category,
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author_id", nullable = true)
     var author: User,
 
     @OneToMany(mappedBy = "recipe", cascade = [CascadeType.ALL], orphanRemoval = true)
     val recipeIngredients: MutableList<RecipeIngredient> = mutableListOf(),
+
+    @OneToMany(mappedBy = "recipe", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JsonIgnore
+    val recipeReviews: MutableList<Review> = mutableListOf(),
+
+    @ManyToMany(mappedBy = "favoriteRecipes", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @JsonIgnore
+    val favoritedByUsers: MutableSet<User> = mutableSetOf()
 )
