@@ -24,7 +24,7 @@ data class User(
     @JsonIgnore
     val userRecipes: MutableSet<Recipe> = mutableSetOf(),
 
-    @ManyToMany
+    @ManyToMany(cascade = [CascadeType.ALL])
     @JoinTable(
         name = "users_favorites",
         joinColumns = [JoinColumn(name = "user_id")],

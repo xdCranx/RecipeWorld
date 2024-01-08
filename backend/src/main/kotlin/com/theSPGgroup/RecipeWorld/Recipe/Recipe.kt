@@ -28,7 +28,7 @@ data class Recipe(
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = true)
-    var author: User,
+    var author: User? = null,
 
     @OneToMany(mappedBy = "recipe", cascade = [CascadeType.ALL], orphanRemoval = true)
     val recipeIngredients: MutableList<RecipeIngredient> = mutableListOf(),
@@ -37,7 +37,6 @@ data class Recipe(
     @JsonIgnore
     val recipeReviews: MutableList<Review> = mutableListOf(),
 
-    @ManyToMany(mappedBy = "favoriteRecipes", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    @JsonIgnore
+    @ManyToMany(mappedBy = "favoriteRecipes")
     val favoritedByUsers: MutableSet<User> = mutableSetOf()
 )

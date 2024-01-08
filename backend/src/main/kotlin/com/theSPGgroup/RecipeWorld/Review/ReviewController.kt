@@ -1,7 +1,6 @@
 package com.theSPGgroup.RecipeWorld.Review
 
 import com.theSPGgroup.RecipeWorld.Recipe.RecipeDTOMapper
-import com.theSPGgroup.RecipeWorld.UserDTOMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

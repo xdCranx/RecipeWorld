@@ -1,7 +1,6 @@
 package com.theSPGgroup.RecipeWorld.Recipe
 
 import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredientDTOMapper.Companion.mapRecipeIngredientToRecipeIngredientDTO
-import com.theSPGgroup.RecipeWorld.UserDTOMapper
 
 class RecipeDTOMapper {
     companion object {
