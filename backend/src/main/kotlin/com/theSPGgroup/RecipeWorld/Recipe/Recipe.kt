@@ -2,6 +2,7 @@ package com.theSPGgroup.RecipeWorld.Recipe
 
 import com.theSPGgroup.RecipeWorld.Category.Category
 import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredient
+import com.theSPGgroup.RecipeWorld.Review.Review
 import com.theSPGgroup.RecipeWorld.User.User
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -30,4 +31,10 @@ data class Recipe(
 
     @OneToMany(mappedBy = "recipe", cascade = [CascadeType.ALL], orphanRemoval = true)
     val recipeIngredients: MutableList<RecipeIngredient> = mutableListOf(),
+
+    @OneToMany(mappedBy = "recipe", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val recipeReviews: MutableList<Review> = mutableListOf(),
+
+//    @ManyToMany(mappedBy = "favoriteRecipes")
+//    val favoritedByUsers: MutableSet<User> = mutableSetOf()
 )

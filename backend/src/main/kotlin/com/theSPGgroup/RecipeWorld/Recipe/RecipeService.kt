@@ -5,6 +5,7 @@ import com.theSPGgroup.RecipeWorld.Category.CategoryRepository
 import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredientService
 import com.theSPGgroup.RecipeWorld.User.UserRepository
 import jakarta.persistence.EntityNotFoundException
+import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -71,12 +72,12 @@ class RecipeService(
         recipeIngredientService.addRecipeIngredient(recipeSend, newRecipe.ingredients)
 
     }
-
+    @Transactional
     fun deleteRecipe(recipeId: Long) {
         try {
             val recipeById = recipeRepository.findById(recipeId)
                 .orElseThrow{ EntityNotFoundException("Recipe with id: $recipeId not found") }
-
+            userRepository.clearFav(recipeId)
             recipeRepository.delete(recipeById)
         } catch (e: Exception) {
             throw IllegalStateException("An error occurred: ${e.message}")

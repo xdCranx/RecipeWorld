@@ -4,6 +4,7 @@ import com.theSPGgroup.RecipeWorld.Recipe.RecipeDTO
 import com.theSPGgroup.RecipeWorld.Recipe.RecipeDTOMapper.Companion.mapRecipeToRecipeDTO
 import com.theSPGgroup.RecipeWorld.Recipe.RecipeRepository
 import jakarta.persistence.EntityNotFoundException
+import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.UUID
@@ -11,7 +12,7 @@ import java.util.UUID
 @Service
 class UserService(@Autowired val userRepository: UserRepository, @Autowired val recipeRepository: RecipeRepository) {
 
-    fun getAllUsers(): List<User> {
+    fun getAllUsers(): Iterable<User> {
         return userRepository.findAll()
     }
 
@@ -36,6 +37,7 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
         userRepository.save(user)
     }
 
+    @Transactional
     fun deleteUser(userId: String) {
         try {
             val id:UUID = UUID.fromString(userId)
@@ -43,7 +45,7 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
                 .orElseThrow{ EntityNotFoundException("User not found") }
 
             if(userById.id == UUID.fromString(userId)) {
-                userRepository.delete(userById)
+                userRepository.deleteUserById(userById.id)
             } else {
                 throw IllegalStateException("ID mismatch")
             }
