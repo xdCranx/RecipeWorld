@@ -11,7 +11,7 @@ class MyRecipesPage extends StatefulWidget {
 }
 
 List<Recipe> myRecipes =[
-  Recipe(id: 1, title: 'schabowy', description: 'zrob schabowego', category_id: 3, author_id: 1, date: DateTime.now())
+  Recipe(id: 1, title: 'schabowy', description: 'zrob schabowego', category_id: 3, author_id: 1, date: DateTime.now(), preptime: 7)
 ];
 
 class _MyRecipesPageState extends State<MyRecipesPage> {
@@ -26,18 +26,20 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
 
       ),
       body:
-      Column(
-        children:
-        myRecipes.map((recipe) => RecipeList(
-            recipe: recipe,
-            delete: () {
-              setState(() {
-                myRecipes.remove(recipe);
-              });
-            }
-
-        )).toList(),
-
+      SingleChildScrollView(
+        child: Column(
+          children:
+          myRecipes.map((recipe) => RecipeList(
+              recipe: recipe,
+              delete: () {
+                setState(() {
+                  myRecipes.remove(recipe);
+                });
+              }
+        
+          )).toList(),
+        
+        ),
       ),
     );
   }

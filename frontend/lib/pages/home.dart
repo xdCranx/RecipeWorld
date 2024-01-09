@@ -11,8 +11,15 @@ class HomePage extends StatefulWidget {
 }
 
 List<Recipe> Recipes =[
-  Recipe(id: 1, title: 'schabowy', description: 'zrob schabowego', category_id: 3, author_id: 1, date: DateTime.now())
+  Recipe(id: 1, title: 'schabowy', description: 'zrob schabowego', category_id: 3, author_id: 1, date: DateTime.now(), preptime: 5)
 ];
+List<String> categories = [
+  "Breakfast",
+  "Dinner",
+  "Lunch",
+  "Drink"
+];
+String? _chosenCategory;
 
 class _HomePageState extends State<HomePage> {
   @override
@@ -45,6 +52,7 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+
               ElevatedButton(onPressed: (){//TODO: IMPLEMENT FILTERING
                  },
                   style: ElevatedButton.styleFrom(

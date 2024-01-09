@@ -6,6 +6,7 @@ class RecipeList extends StatelessWidget {
   final VoidCallback delete;
   RecipeList({ required this.recipe, required this.delete });
 
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -25,17 +26,28 @@ class RecipeList extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text(recipe.title,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey[600],
-                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween ,
+                children: [
+                  Text(recipe.title,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[600],
+                      )),
+                  Text("${recipe.preptime} minutes",
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600]
+                      )),
+                ],
+              ),
               SizedBox(height: 6),
               Text(recipe.description,
                   style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey[800]
                   )),
+
               SizedBox(height:8),
               TextButton.icon(
                   onPressed: delete,
