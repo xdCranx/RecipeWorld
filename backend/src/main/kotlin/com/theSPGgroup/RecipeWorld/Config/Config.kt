@@ -17,7 +17,6 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.time.LocalDateTime
-import java.util.*
 
 @Configuration
 class Config(
@@ -34,54 +33,44 @@ class Config(
         return CommandLineRunner {
 //===USERS===
             val user1 = User(
-                UUID.randomUUID(),
-                "Major1",
-                "Pajor1"
+                username = "Major1",
+                password = "Pajor1"
             )
             val user2 = User(
-                UUID.randomUUID(),
-                "julix12",
-                "delfinek123"
+                username = "julix12",
+                password = "delfinek123"
             )
             val user3 = User(
-                UUID.randomUUID(),
-                "Smiley001",
-                "haslo123"
+                username = "Smiley001",
+                password = "haslo123"
             )
             val user4 = User(
-                UUID.randomUUID(),
-                "KszycheU",
-                "csvfilefan"
+                username = "KszycheU",
+                password = "csvfilefan"
             )
             val user5 = User(
-                UUID.randomUUID(),
-                "Not_Broken",
-                "drzwisaspoko98"
+                username = "Not_Broken",
+                password = "drzwisaspoko98"
             )
             val user6 = User(
-                UUID.randomUUID(),
-                "rol-ex",
-                "piwoiburger30938"
+                username = "rol-ex",
+                password = "piwoiburger30938"
             )
             val user7 = User(
-                UUID.randomUUID(),
-                "KolekcjonerDusz",
-                "PDWiSLU997"
+                username = "KolekcjonerDusz",
+                password = "PDWiSLU997"
             )
             val user8 = User(
-                UUID.randomUUID(),
-                "nugla3371",
-                "HolowniaGigaChad"
+                username = "nugla3371",
+                password = "HolowniaGigaChad"
             )
             val user9 = User(
-                UUID.randomUUID(),
-                "KapitanTorpeda1",
-                "chcewiecejdymu"
+                username = "KapitanTorpeda1",
+                password = "chcewiecejdymu"
             )
             val user10 = User(
-                UUID.randomUUID(),
-                "glupia_foliara",
-                "wkleslablondyna123"
+                username = "glupia_foliara",
+                password = "wkleslablondyna123"
             )
             userRepository.saveAll(
                 listOf(
@@ -635,11 +624,6 @@ class Config(
                 )
             )
 
-//            userService.addRecipeToFavorites(user1.id.toString(), recipe2.id.toString())
-//            userService.addRecipeToFavorites(user3.id.toString(), recipe1.id.toString())
-//            userService.addRecipeToFavorites(user3.id.toString(), recipe2.id.toString())
-//            userService.addRecipeToFavorites(user4.id.toString(), recipe4.id.toString())
-//            userService.addRecipeToFavorites(user2.id.toString(), recipe3.id.toString())
         }
     }
 }
