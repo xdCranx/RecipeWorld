@@ -594,7 +594,7 @@ class Config(
 
 //===REVIEW===
             val review1 = Review(
-                user = user6,
+                user = user1,
                 comment = "Very good, gave me butterflies!",
                 recipe = chocolateCake
             )

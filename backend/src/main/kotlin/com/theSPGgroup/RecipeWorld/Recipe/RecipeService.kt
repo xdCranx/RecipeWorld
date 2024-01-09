@@ -3,16 +3,11 @@ package com.theSPGgroup.RecipeWorld.Recipe
 import com.theSPGgroup.RecipeWorld.Category.CategoryName
 import com.theSPGgroup.RecipeWorld.Category.CategoryRepository
 import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredientService
-import com.theSPGgroup.RecipeWorld.Review.ReviewRepository
 import com.theSPGgroup.RecipeWorld.User.UserRepository
-import com.theSPGgroup.RecipeWorld.User.UserService
-import jakarta.persistence.EntityManager
 import jakarta.persistence.EntityNotFoundException
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import org.springframework.web.server.ResponseStatusException
 import java.time.LocalDateTime
 import java.util.*
 
@@ -22,9 +17,7 @@ class RecipeService(
     @Autowired val recipeRepository: RecipeRepository,
     @Autowired val categoryRepository: CategoryRepository,
     @Autowired val userRepository: UserRepository,
-    @Autowired val recipeIngredientService: RecipeIngredientService,
-    @Autowired val userService: UserService,
-    private val entityManager: EntityManager
+    @Autowired val recipeIngredientService: RecipeIngredientService
 ) {
 
     fun getAllRecipes(): List<RecipeDTO> {
@@ -60,10 +53,6 @@ class RecipeService(
             throw IllegalArgumentException("Recipe must have ingredients")
         }
 
-        if (newRecipe.userId.isEmpty()) {
-            throw IllegalArgumentException("Recipe must have author")
-        }
-
         val user = userRepository.findById(UUID.fromString(newRecipe.userId))
             .orElseThrow { EntityNotFoundException("User not found") }
 
@@ -83,36 +72,17 @@ class RecipeService(
         recipeIngredientService.addRecipeIngredient(recipeSend, newRecipe.ingredients)
 
     }
-
+    @Transactional
     fun deleteRecipe(recipeId: Long) {
         try {
-            val recipeById: Recipe = recipeRepository.findById(recipeId)
-                .orElseThrow { EntityNotFoundException("Recipe not found") }
-
-            println(recipeById.favoritedByUsers.toString())
-            recipeById.favoritedByUsers.forEach { it.favoriteRecipes.remove(recipeById) }
-            recipeById.favoritedByUsers.clear()
-            println(recipeById.favoritedByUsers.toString())
-
+            val recipeById = recipeRepository.findById(recipeId)
+                .orElseThrow{ EntityNotFoundException("Recipe with id: $recipeId not found") }
+            userRepository.clearFav(recipeId)
             recipeRepository.delete(recipeById)
-            println(recipeById.favoritedByUsers.toString())
         } catch (e: Exception) {
-            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred: ${e.message}")
+            throw IllegalStateException("An error occurred: ${e.message}")
         }
     }
-
-//    fun deleteRecipe(recipeId: Long) {
-//        try {
-//            val recipeById = recipeRepository.findById(recipeId)
-//                .orElseThrow { EntityNotFoundException("Recipe with id: $recipeId not found") }
-//
-////            userService.removeRecipeFromFavorites(recipeById.author.id.toString(), recipeById.id.toString())
-//
-//            recipeRepository.delete(recipeById)
-//        } catch (e: Exception) {
-//            throw IllegalStateException("An error occurred: ${e.message}")
-//        }
-//    }
 
     fun getRecipesByCategory(categoryName: CategoryName): List<RecipeDTO> {
         val category = categoryRepository.findByName(categoryName)

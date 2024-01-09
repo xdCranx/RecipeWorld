@@ -1,6 +1,5 @@
 package com.theSPGgroup.RecipeWorld.Recipe
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.theSPGgroup.RecipeWorld.Category.Category
 import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredient
 import com.theSPGgroup.RecipeWorld.Review.Review
@@ -27,16 +26,15 @@ data class Recipe(
     var category: Category,
 
     @ManyToOne
-    @JoinColumn(name = "author_id", nullable = true)
-    var author: User? = null,
+    @JoinColumn(name = "author_id")
+    var author: User,
 
     @OneToMany(mappedBy = "recipe", cascade = [CascadeType.ALL], orphanRemoval = true)
     val recipeIngredients: MutableList<RecipeIngredient> = mutableListOf(),
 
     @OneToMany(mappedBy = "recipe", cascade = [CascadeType.ALL], orphanRemoval = true)
-    @JsonIgnore
     val recipeReviews: MutableList<Review> = mutableListOf(),
 
-    @ManyToMany(mappedBy = "favoriteRecipes")
-    val favoritedByUsers: MutableSet<User> = mutableSetOf()
+//    @ManyToMany(mappedBy = "favoriteRecipes")
+//    val favoritedByUsers: MutableSet<User> = mutableSetOf()
 )
