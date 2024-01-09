@@ -4,6 +4,7 @@ import com.theSPGgroup.RecipeWorld.Recipe.Recipe
 import com.theSPGgroup.RecipeWorld.Review.Review
 import jakarta.persistence.*
 import java.util.UUID
+
 @Entity
 @Table
 data class User(

@@ -35,6 +35,4 @@ data class Recipe(
     @OneToMany(mappedBy = "recipe", cascade = [CascadeType.ALL], orphanRemoval = true)
     val recipeReviews: MutableList<Review> = mutableListOf(),
 
-//    @ManyToMany(mappedBy = "favoriteRecipes")
-//    val favoritedByUsers: MutableSet<User> = mutableSetOf()
 )

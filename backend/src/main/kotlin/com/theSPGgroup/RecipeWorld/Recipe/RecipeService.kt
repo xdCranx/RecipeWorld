@@ -72,13 +72,16 @@ class RecipeService(
         recipeIngredientService.addRecipeIngredient(recipeSend, newRecipe.ingredients)
 
     }
+
     @Transactional
     fun deleteRecipe(recipeId: Long) {
         try {
             val recipeById = recipeRepository.findById(recipeId)
                 .orElseThrow{ EntityNotFoundException("Recipe with id: $recipeId not found") }
+
             userRepository.clearFav(recipeId)
             recipeRepository.delete(recipeById)
+
         } catch (e: Exception) {
             throw IllegalStateException("An error occurred: ${e.message}")
         }
