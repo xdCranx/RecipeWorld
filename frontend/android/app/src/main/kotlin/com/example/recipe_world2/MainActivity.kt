@@ -1,4 +1,4 @@
-package com.theSPGgroup.backend
+package com.example.recipe_world2
 
 import io.flutter.embedding.android.FlutterActivity
 
