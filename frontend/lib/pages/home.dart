@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_world2/DTOs/recipe_dto.dart';
 import 'package:recipe_world2/services/recipe_list.dart';
-import '/services/recipe.dart';
-import '/services/recipe_list.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,9 +10,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-List<Recipe> Recipes =[
-  Recipe(id: 1, title: 'schabowy', description: 'zrob schabowego', category_id: 3, author_id: 1, date: DateTime.now(), preptime: 5)
-];
+List<RecipeDTO> Recipes =[];
+
 List<String> categories = [
   "Breakfast",
   "Dinner",

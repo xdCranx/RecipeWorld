@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:recipe_world2/DTOs/recipe_dto.dart';
+import 'package:recipe_world2/controllers/user_controller.dart';
 import 'package:recipe_world2/services/recipe_list.dart';
-import '/services/recipe.dart';
-import '/services/recipe_list.dart';
 
 class MyRecipesPage extends StatefulWidget {
   const MyRecipesPage({super.key});
@@ -10,36 +11,44 @@ class MyRecipesPage extends StatefulWidget {
   State<MyRecipesPage> createState() => _MyRecipesPageState();
 }
 
-List<Recipe> myRecipes =[
-  Recipe(id: 1, title: 'schabowy', description: 'zrob schabowego', category_id: 3, author_id: 1, date: DateTime.now(), preptime: 7)
-];
-
 class _MyRecipesPageState extends State<MyRecipesPage> {
+  UserController userController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         title: Text("My recipes"),
         centerTitle: true,
         backgroundColor: Colors.blue,
-
       ),
-      body:
-      SingleChildScrollView(
-        child: Column(
-          children:
-          myRecipes.map((recipe) => RecipeList(
-              recipe: recipe,
-              delete: () {
-                setState(() {
-                  myRecipes.remove(recipe);
-                });
-              }
-        
-          )).toList(),
-        
-        ),
+      body: FutureBuilder<List<RecipeDTO>>(
+        future: userController.getMyRecipes(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          } else {
+            List<RecipeDTO> myRecipes = snapshot.data!;
+            return SingleChildScrollView(
+              child: Column(
+                children: myRecipes
+                    .map(
+                      (recipe) => RecipeList(
+                    recipe: recipe,
+                    delete: () {
+                      setState(() {
+                        myRecipes.remove(recipe);
+                      });
+                    },
+                  ),
+                )
+                    .toList(),
+              ),
+            );
+          }
+        },
       ),
     );
   }

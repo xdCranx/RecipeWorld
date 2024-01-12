@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_world2/DTOs/recipe_dto.dart';
 import 'recipe.dart';
 import '/pages/recipe_page.dart';
 class RecipeList extends StatelessWidget {
-  final Recipe recipe;
+  final RecipeDTO recipe;
   final VoidCallback delete;
   RecipeList({ required this.recipe, required this.delete });
 
@@ -34,26 +35,18 @@ class RecipeList extends StatelessWidget {
                         fontSize: 18,
                         color: Colors.grey[600],
                       )),
-                  Text("${recipe.preptime} minutes",
+                  Text("${recipe.prepTime} minutes",
                       style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey[600]
                       )),
                 ],
               ),
-              SizedBox(height: 6),
-              Text(recipe.description,
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[800]
-                  )),
-
               SizedBox(height:8),
               TextButton.icon(
                   onPressed: delete,
                   icon: Icon(Icons.delete),
                   label: Text('remove recipe'))
-
             ],
           ),
         ),
