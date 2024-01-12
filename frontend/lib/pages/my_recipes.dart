@@ -18,7 +18,7 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My recipes"),
+        title: const Text("My recipes"),
         centerTitle: true,
         backgroundColor: Colors.blue,
       ),
@@ -26,7 +26,7 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
         future: userController.getMyRecipes(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));
           } else {
@@ -43,8 +43,7 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
                       });
                     },
                   ),
-                )
-                    .toList(),
+                ).toList(),
               ),
             );
           }
