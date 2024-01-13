@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import '/services/ingredient.dart';
 import '/services/ingredient_list.dart';
+import '/services/dropdown_menu.dart';
 
 class AddRecipePage extends StatefulWidget {
-  const AddRecipePage({super.key});
+  AddRecipePage({super.key});
+
 
   @override
   State<AddRecipePage> createState() => _AddRecipePageState();
 }
-List<Ingredient> availableIngredients = [
-  Ingredient(id: 1, name: 'mięso', unit: 'sztuki'),
-  Ingredient(id: 2, name: 'bułka tarta', unit: 'gramy'),
-  Ingredient(id: 3, name: 'jajko', unit: 'sztuki')
-];
+
+
 
 List<String> categories = [
   "Breakfast",
@@ -24,6 +23,15 @@ List<String> categories = [
 
 class _AddRecipePageState extends State<AddRecipePage> {
   String? _chosenCategory;
+  ElevatedButton? _chosenIngredient;
+  List<Ingredient> availableIngredients = [
+    Ingredient(id: 1, name: 'mięso', unit: 'sztuki'),
+    Ingredient(id: 2, name: 'bułka tarta', unit: 'gramy'),
+    Ingredient(id: 3, name: 'jajko', unit: 'sztuki')
+  ];
+  List<Ingredient> addedIngredients = [];
+  String test ="a";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,22 +124,27 @@ class _AddRecipePageState extends State<AddRecipePage> {
                 hintText: 'Enter recipe description',
               ),
             ),
-            SizedBox(height: 20,
+            SizedBox(height: 40,
             ),
-        
-            Text('Choose ingredients',
-                style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold
-                )),
+
+
+            PopupMenu(children:
+            availableIngredients.map((ingredient) => ElevatedButton(onPressed: (){
+              setState(() {
+                availableIngredients.remove(ingredient);
+                addedIngredients.add(ingredient);
+
+
+              });
+            },
+                child: Text(ingredient.name))).toList()),
 
             Column(
               children:
-              availableIngredients.map((ingredient) => IngredientButtons(
+              addedIngredients.map((ingredient) => IngredientButtons(
                 ingredient: ingredient,
               )).toList(),
-        
+
             ),
             SizedBox(height: 25,),
             ElevatedButton(
