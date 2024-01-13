@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:recipe_world2/services/recipe_list.dart';
 import '/services/recipe.dart';
 import '/services/recipe_list.dart';
+import '/services/category_filter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -49,16 +50,11 @@ class _HomePageState extends State<HomePage> {
           SizedBox(
               height: 20
           ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-
-              ElevatedButton(onPressed: (){//TODO: IMPLEMENT FILTERING
-                 },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(),
-                  ),
-                  child: Text('Filter')),
+              FilterButton(),
 
               SizedBox(
                 width: 150,

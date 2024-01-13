@@ -134,7 +134,6 @@ class _AddRecipePageState extends State<AddRecipePage> {
                 availableIngredients.remove(ingredient);
                 addedIngredients.add(ingredient);
 
-
               });
             },
                 child: Text(ingredient.name))).toList()),

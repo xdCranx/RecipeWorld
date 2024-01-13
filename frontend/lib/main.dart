@@ -8,6 +8,7 @@ import 'pages/login.dart';
 import 'pages/my_recipes.dart';
 import 'pages/recipe_page.dart';
 import 'pages/add_recipe.dart';
+import 'pages/test_page.dart';
 
 void main() {
 
@@ -20,6 +21,7 @@ void main() {
         '/myrecipes': (context) => MyRecipesPage(),
         '/recipe': (context) => RecipePage(),
         '/add_recipe': (context) => AddRecipePage(),
+        '/test_page': (context) => TestPage(),
       }
   ));
 }
