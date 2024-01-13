@@ -32,6 +32,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
       Column(
         children:
         favRecipes.map((recipe) => RecipeList(
+          removeAllowed: true,
             recipe: recipe,
             delete: () {
               setState(() {

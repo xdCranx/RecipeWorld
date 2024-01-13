@@ -79,10 +79,11 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children:
               Recipes.map((recipe) => RecipeList(
+                addToFavAllowed: true,
                   recipe: recipe,
-                  delete: () {
+                  fav: () {
                     setState(() {
-                      Recipes.remove(recipe);
+                      //TODO: IMPLEMENT ADDING TO USER'S FAVOURITES IN DATABASE
                     });
                   }
 

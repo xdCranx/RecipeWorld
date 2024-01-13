@@ -4,7 +4,12 @@ import '/pages/recipe_page.dart';
 class RecipeList extends StatelessWidget {
   final Recipe recipe;
   final VoidCallback delete;
-  RecipeList({ required this.recipe, required this.delete });
+  final VoidCallback fav;
+  final bool removeAllowed;
+  final bool addToFavAllowed;
+  RecipeList({ required this.recipe,   this.removeAllowed=false, this.addToFavAllowed=false, VoidCallback? delete, VoidCallback? fav }):
+        delete = delete ?? (() {}),
+        fav = fav ?? (() {});
 
 
   @override
@@ -49,10 +54,17 @@ class RecipeList extends StatelessWidget {
                   )),
 
               SizedBox(height:8),
+              if(removeAllowed == true)
               TextButton.icon(
                   onPressed: delete,
                   icon: Icon(Icons.delete),
-                  label: Text('remove recipe'))
+                  label: Text('remove recipe')),
+
+              if(addToFavAllowed == true)
+                TextButton.icon(
+                    onPressed: fav,
+                    icon: Icon(Icons.favorite),
+                    label: Text('Add to favourites'))
 
             ],
           ),
