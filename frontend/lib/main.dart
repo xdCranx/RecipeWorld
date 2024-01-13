@@ -7,10 +7,10 @@ import 'pages/login.dart';
 import 'pages/add_recipe.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(RecipeWorld());
 }
 
-class MyApp extends StatelessWidget {
+class RecipeWorld extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

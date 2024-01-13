@@ -46,6 +46,11 @@ class RecipeList extends StatelessWidget {
                 ],
               ),
               const SizedBox(height:8),
+              // Text(
+              //   recipe.description,
+              //   maxLines: 4,
+              //   overflow: TextOverflow.fade,
+              // ),
               TextButton.icon(
                   onPressed: delete,
                   icon: const Icon(Icons.delete),
