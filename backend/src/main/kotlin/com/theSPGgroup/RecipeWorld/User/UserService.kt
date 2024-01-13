@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-class UserService(@Autowired val userRepository: UserRepository, @Autowired val recipeRepository: RecipeRepository) {
+class UserService(
+    @Autowired val userRepository: UserRepository,
+    @Autowired val recipeRepository: RecipeRepository
+) {
 
     fun getAllUsers(): Iterable<User> {
         return userRepository.findAll()
@@ -44,6 +47,9 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
             val userById: User = userRepository.findById(id)
                 .orElseThrow{ EntityNotFoundException("User not found") }
 
+            val recipes = recipeRepository.findByAuthor(userById)
+            recipeRepository.deleteAll(recipes)
+
             if(userById.id == UUID.fromString(userId)) {
                 userRepository.deleteUserById(userById.id)
             } else {
@@ -74,7 +80,7 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
         val recipe = recipeRepository.findById(recipeId.toLong())
             .orElseThrow { EntityNotFoundException("Recipe not found") }
 
-        if(recipe.author.equals(user)){
+        if(recipe.author == user){
             throw IllegalArgumentException("Cannot add your own recipe to favourites")
         }
         user.favoriteRecipes.add(recipe)

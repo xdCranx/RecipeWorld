@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_world2/controllers/user_controller.dart';
 import 'package:recipe_world2/pages/favourites.dart';
 import '/services/user.dart';
 import 'my_recipes.dart';
+import 'package:get/get.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -11,7 +13,7 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  User loggedUser = new User(id:1,username:'Filip', email:'studentdebil@gmail.com', password: 'haslo123');
+  User loggedUser = Get.find<UserController>().user;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class _UserPageState extends State<UserPage> {
                     children: <Widget>[
                       Icon(Icons.alternate_email, color: Colors.blue),
                       SizedBox(width: 8),
-                      Text(loggedUser.email,
+                      Text("tu powinien byc email",
                         style: TextStyle(
 
                             fontSize: 18,

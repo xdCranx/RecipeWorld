@@ -1,7 +1,6 @@
 package com.theSPGgroup.RecipeWorld.User
 
 import com.theSPGgroup.RecipeWorld.Recipe.RecipeDTO
-import com.theSPGgroup.RecipeWorld.UserDTOMapper
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus

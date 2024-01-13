@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'recipe.dart';
+import 'package:recipe_world2/DTOs/recipe_dto.dart';
 import '/pages/recipe_page.dart';
-class RecipeList extends StatelessWidget {
-  final Recipe recipe;
-  final VoidCallback delete;
-  RecipeList({ required this.recipe, required this.delete });
 
+class RecipeList extends StatelessWidget {
+  final RecipeDTO recipe;
+  final VoidCallback delete;
+  const RecipeList({super.key,  required this.recipe, required this.delete });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
+      margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: OutlinedButton(
         onPressed: (){
           Navigator.push(
-              context, MaterialPageRoute(builder: (_) => RecipePage()));
+              context, MaterialPageRoute(builder: (_) => RecipePage(recipeId: recipe.id,)));
         },
         style: OutlinedButton.styleFrom(
-          side: BorderSide(width: 0.01,color: Colors.transparent),
-          shape: RoundedRectangleBorder()
+          side: const BorderSide(width: 0.01,color: Colors.transparent),
+          shape: const RoundedRectangleBorder()
 
         ),
         child: Padding(
@@ -29,31 +29,28 @@ class RecipeList extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween ,
                 children: [
-                  Text(recipe.title,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey[600],
-                      )),
-                  Text("${recipe.preptime} minutes",
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[600]
-                      )),
+                  Text(
+                    recipe.title,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[600],
+                    )
+                  ),
+                  Text(
+                    "${recipe.prepTime} minutes",
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600]
+                    )
+                  ),
                 ],
               ),
-              SizedBox(height: 6),
-              Text(recipe.description,
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[800]
-                  )),
-
-              SizedBox(height:8),
+              const SizedBox(height:8),
               TextButton.icon(
                   onPressed: delete,
-                  icon: Icon(Icons.delete),
-                  label: Text('remove recipe'))
-
+                  icon: const Icon(Icons.delete),
+                  label: const Text('remove recipe')
+              )
             ],
           ),
         ),

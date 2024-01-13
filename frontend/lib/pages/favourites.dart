@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_world2/DTOs/recipe_dto.dart';
 import 'package:recipe_world2/services/recipe_list.dart';
 import '/services/recipe.dart';
 import '/services/recipe_list.dart';
@@ -12,10 +13,7 @@ class FavouritesPage extends StatefulWidget {
 
 }
 
-List<Recipe> favRecipes =[
-  Recipe(id: 1, title: 'schabowy', description: 'zrob schabowego', category_id: 3, author_id: 1, date: DateTime.now(), preptime: 8),
-  Recipe(id:2, title: "mielony ", description: 'zrob schabowego', category_id: 3, author_id: 1, date: DateTime.now(), preptime: 3)
-];
+List<RecipeDTO> favRecipes =[];
 
 class _FavouritesPageState extends State<FavouritesPage> {
   @override
