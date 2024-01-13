@@ -1,4 +1,4 @@
-package com.theSPGgroup.backend
+package com.theSPGgroup.frontend
 
 import io.flutter.embedding.android.FlutterActivity
 
