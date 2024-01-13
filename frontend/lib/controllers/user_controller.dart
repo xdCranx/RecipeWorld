@@ -15,8 +15,8 @@ class UserController extends GetxController {
   late List<RecipeDTO> _myRecipes;
   get myRecipes=> _myRecipes;
 
-  final String apiUrl = "http://10.0.2.2:8080/api/user";
-  final String myRecipesUrl = "http://10.0.2.2:8080/api/recipe/author";
+  final String apiUrl = "http://localhost:8080/api/user";
+  final String myRecipesUrl = "http://localhost:8080/api/recipe/author";
 
   Future<bool> login(String username, String password) async {
     try {

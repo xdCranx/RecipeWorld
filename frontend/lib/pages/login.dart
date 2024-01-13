@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:recipe_world2/DTOs/recipe_dto.dart';
 
 import '../controllers/user_controller.dart';
 
@@ -55,8 +54,8 @@ class _LoginState extends State<Login> {
                     passwordController.text,
                   );
 
-                  if (loggedIn = true) {
-                    Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+                  if (loggedIn) {
+                    Get.toNamed('/home');
                   } else {
                     Get.snackbar(
                       "Login Error",
