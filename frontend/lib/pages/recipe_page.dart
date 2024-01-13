@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:recipe_world2/DTOs/recipe_ingredient_dto.dart';
+import 'package:recipe_world2/DTOs/review_dto.dart';
 import '../DTOs/recipe_dto.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,35 +17,59 @@ class RecipePage extends StatefulWidget {
 
 class _RecipePageState extends State<RecipePage> {
   late RecipeDTO? recipe;
-  late List<RecipeIngredientDTO> ingredients = []; // Initialize with an empty list
+  late List<RecipeIngredientDTO> ingredients = [];
+  late List<ReviewDTO> reviews = [];
 
   @override
   void initState() {
     super.initState();
-    fetchRecipeDetails();
+    fetchRecipePageDetails();
   }
 
-  Future<void> fetchRecipeDetails() async {
-    String apiUrl = "";
+  Future<void> fetchRecipePageDetails() async {
+    String recipeApiUrl = "";
+    String reviewApiUrl = "";
     if (Platform.isAndroid) {
-      apiUrl = "http://10.0.2.2:8080/api/recipe";
+      recipeApiUrl = "http://10.0.2.2:8080/api/recipe";
+      reviewApiUrl = "http://10.0.2.2:8080/api/review/recipe";
     } else {
-      apiUrl = "http://localhost:8080/api/recipe";
+      recipeApiUrl = "http://localhost:8080/api/recipe";
+      reviewApiUrl = "http://localhost:8080/api/review/recipe";
     }
 
     try {
-      final response = await http.get(
-        Uri.parse("$apiUrl/${widget.recipeId}"),
+      final recipeResponse = await http.get(
+        Uri.parse("$recipeApiUrl/${widget.recipeId}"),
         headers: {"Content-Type": "application/json"},
       );
 
-      if (response.statusCode == 200) {
-        Map<String, dynamic> recipeJson = json.decode(response.body);
+      if (recipeResponse.statusCode == 200) {
+        Map<String, dynamic> recipeJson = json.decode(recipeResponse.body);
         RecipeDTO recipeDTO = RecipeDTO.fromJson(recipeJson);
 
         recipe = recipeDTO;
       } else {
-        print("Get Recipe Error: ${response.statusCode}");
+        print("Get Recipe Error: ${recipeResponse.statusCode}");
+        return;
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return;
+    }
+
+    try {
+      final reviewResponse = await http.get(
+        Uri.parse("$reviewApiUrl/${widget.recipeId}"),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (reviewResponse.statusCode == 200) {
+        List<dynamic> reviewJsonList = json.decode(reviewResponse.body);
+        List<ReviewDTO> reviewDTO = reviewJsonList.map((json) => ReviewDTO.fromJson(json)).toList();
+
+        reviews = reviewDTO;
+      } else {
+        print("Get Review Error: ${reviewResponse.statusCode}");
         return;
       }
     } catch (e) {
@@ -53,7 +78,12 @@ class _RecipePageState extends State<RecipePage> {
     }
 
     ingredients = recipe!.recipeIngredients.map((ingredient) {
-      return RecipeIngredientDTO(id: ingredient.id, name: ingredient.name, unit: ingredient.unit, quantity: ingredient.quantity);
+      return RecipeIngredientDTO(
+          id: ingredient.id,
+          name: ingredient.name,
+          unit: ingredient.unit,
+          quantity: ingredient.quantity
+      );
     }).toList();
 
     setState(() {});
@@ -76,7 +106,7 @@ class _RecipePageState extends State<RecipePage> {
         elevation: 0,
         backgroundColor: Colors.blue,
       ),
-      body: SingleChildScrollView( // Wrap your content with SingleChildScrollView
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(30, 40, 30, 0),
           child: Column(
@@ -112,13 +142,29 @@ class _RecipePageState extends State<RecipePage> {
                 ),
               ),
               Column(
-                children: ingredients
-                    .map(
-                      (ingredient) => IngredientList(
+                children: ingredients.map((ingredient) =>
+                    IngredientList(
                     ingredient: ingredient,
                   ),
-                )
-                    .toList(),
+                ).toList(),
+              ),
+              const SizedBox(height: 30,),
+              Text(
+                "Reviews:",
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  letterSpacing: 2,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: reviews.map((review) =>
+                    ReviewList(
+                      review: review,
+                    ),
+                ).toList(),
               ),
               const SizedBox(height: 20,)
             ],
@@ -171,6 +217,46 @@ class IngredientList extends StatelessWidget {
                       )
                     ),
                   ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ReviewList extends StatelessWidget {
+  final ReviewDTO review;
+  const ReviewList({super.key,  required this.review});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.blue[100],
+      margin: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  review.user.username,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey[900],
+                  )
+                ),
+                Text(
+                  review.comment,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  )
                 ),
               ],
             ),

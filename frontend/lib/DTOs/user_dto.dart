@@ -1,5 +1,3 @@
-import 'package:recipe_world2/services/user.dart';
-
 class UserDTO {
   String username;
 
