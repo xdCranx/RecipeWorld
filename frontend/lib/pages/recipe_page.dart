@@ -1,10 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:recipe_world2/DTOs/recipe_ingredient_dto.dart';
 import 'package:recipe_world2/DTOs/review_dto.dart';
 import '../DTOs/recipe_dto.dart';
-import 'package:http/http.dart' as http;
+import '../services/recipe_page_service.dart';
 
 class RecipePage extends StatefulWidget {
   final int recipeId;
@@ -19,74 +19,42 @@ class _RecipePageState extends State<RecipePage> {
   late RecipeDTO? recipe;
   late List<RecipeIngredientDTO> ingredients = [];
   late List<ReviewDTO> reviews = [];
+  final TextEditingController reviewTextController = TextEditingController();
+  bool enteredEmptyText = false;
 
   @override
   void initState() {
     super.initState();
-    fetchRecipePageDetails();
+    fetchReviewsDetails();
+    fetchRecipeDetails();
+    setState(() {});
   }
 
-  Future<void> fetchRecipePageDetails() async {
-    String recipeApiUrl = "";
-    String reviewApiUrl = "";
-    if (Platform.isAndroid) {
-      recipeApiUrl = "http://10.0.2.2:8080/api/recipe";
-      reviewApiUrl = "http://10.0.2.2:8080/api/review/recipe";
-    } else {
-      recipeApiUrl = "http://localhost:8080/api/recipe";
-      reviewApiUrl = "http://localhost:8080/api/review/recipe";
+  Future<void> fetchReviewsDetails() async {
+    Map<String, dynamic> result = await RecipePageService.fetchReviewsDetails(widget.recipeId);
+
+    if (result.containsKey('reviews')) {
+      List<ReviewDTO> reviewDTO = result['reviews'];
+      reviews = reviewDTO;
+    } else if (result.containsKey('reviewError')) {
+      print(result['reviewError']);
     }
+  }
 
-    try {
-      final recipeResponse = await http.get(
-        Uri.parse("$recipeApiUrl/${widget.recipeId}"),
-        headers: {"Content-Type": "application/json"},
-      );
+  Future<void> fetchRecipeDetails() async {
+    Map<String, dynamic> result = await RecipePageService.fetchRecipeDetails(widget.recipeId);
 
-      if (recipeResponse.statusCode == 200) {
-        Map<String, dynamic> recipeJson = json.decode(recipeResponse.body);
-        RecipeDTO recipeDTO = RecipeDTO.fromJson(recipeJson);
+    if (result.containsKey('recipe')) {
+      RecipeDTO recipeDTO = result['recipe'];
+      recipe = recipeDTO;
 
-        recipe = recipeDTO;
-      } else {
-        print("Get Recipe Error: ${recipeResponse.statusCode}");
-        return;
-      }
-    } catch (e) {
-      print("Exception: $e");
-      return;
+      List<RecipeIngredientDTO> ingredients = result['ingredients'];
+      this.ingredients = ingredients;
+
+      setState(() {});
+    } else if (result.containsKey('recipeError')) {
+      print(result['recipeError']);
     }
-
-    try {
-      final reviewResponse = await http.get(
-        Uri.parse("$reviewApiUrl/${widget.recipeId}"),
-        headers: {"Content-Type": "application/json"},
-      );
-
-      if (reviewResponse.statusCode == 200) {
-        List<dynamic> reviewJsonList = json.decode(reviewResponse.body);
-        List<ReviewDTO> reviewDTO = reviewJsonList.map((json) => ReviewDTO.fromJson(json)).toList();
-
-        reviews = reviewDTO;
-      } else {
-        print("Get Review Error: ${reviewResponse.statusCode}");
-        return;
-      }
-    } catch (e) {
-      print("Exception: $e");
-      return;
-    }
-
-    ingredients = recipe!.recipeIngredients.map((ingredient) {
-      return RecipeIngredientDTO(
-          id: ingredient.id,
-          name: ingredient.name,
-          unit: ingredient.unit,
-          quantity: ingredient.quantity
-      );
-    }).toList();
-
-    setState(() {});
   }
 
   @override
@@ -148,7 +116,7 @@ class _RecipePageState extends State<RecipePage> {
                   ),
                 ).toList(),
               ),
-              const SizedBox(height: 30,),
+              const SizedBox(height: 40,),
               Text(
                 "Reviews:",
                 style: TextStyle(
@@ -157,6 +125,56 @@ class _RecipePageState extends State<RecipePage> {
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: reviewTextController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your review',
+                        errorText: enteredEmptyText ? 'Review cannot be empty' : null,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (reviewTextController.text.isNotEmpty) {
+                        int recipeId = widget.recipeId;
+                        Map<String, dynamic> result = await RecipePageService.addReview(recipeId, reviewTextController.text);
+
+                        if (result.containsKey('success')) {
+                          await fetchReviewsDetails();
+                        } else {
+                          print(result['error']);
+                        }
+                      } else {
+                        setState(() {
+                          enteredEmptyText = true;
+                        });
+
+                        Timer(const Duration(seconds: 2), () {
+                          setState(() {
+                            enteredEmptyText = false;
+                          });
+                        });
+                      }
+
+                      reviewTextController.clear();
+                      FocusScope.of(context).unfocus();
+                      setState(() {});
+                    },
+                    child: Text(
+                      "Add",
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[900]
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
