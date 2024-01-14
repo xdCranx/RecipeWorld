@@ -116,8 +116,7 @@ class _UserPageState extends State<UserPage> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => const FavouritesPage()));
+                  Get.to(FavoritesPage());
                 },
               ),
               const SizedBox(height: 30),
@@ -199,7 +198,7 @@ class _UserPageState extends State<UserPage> {
                   );
 
                   if (confirmed == true) {
-                    await Get.find<UserController>().deleteAccount();
+                    await Get.find<UserController>().deleteMyAccount();
                   }
                 },
               ),

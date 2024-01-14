@@ -19,16 +19,44 @@ class UserController extends GetxController {
   late List<ReviewDTO> _myReviews;
   get myReviews=> _myReviews;
 
+  late List<RecipeDTO> _myFavorites;
+  get myFavorites=> _myFavorites;
+
   late String apiUrl;
   late String myRecipesUrl;
   late String myReviewsUrl;
   late String deleteReviewApiUrl;
   late String deleteAccountApiUrl;
+  late String addToFavoritesApiUrl;
+  late String userFavoritesApiUrl;
+  late String removeFromFavoritesApiUrl;
 
   void resetUser() {
     _user = User(id: '', username: '', password: '');
     _myRecipes = [];
     _myReviews = [];
+    apiUrl = "";
+    myReviewsUrl = "";
+    myRecipesUrl = "";
+    deleteAccountApiUrl = "";
+    deleteReviewApiUrl = "";
+    addToFavoritesApiUrl = "";
+    userFavoritesApiUrl = "";
+    removeFromFavoritesApiUrl = "";
+  }
+
+  Future<void> toggleFavorite(int recipeId) async {
+    if (isRecipeFavorite(recipeId)) {
+      await removeFromMyFavorites(recipeId);
+    } else {
+      await addToMyFavorites(recipeId);
+    }
+
+    update();
+  }
+
+  bool isRecipeFavorite(int recipeId) {
+    return myFavorites.any((favRecipe) => favRecipe.id == recipeId);
   }
 
   Future<bool> login(String username, String password) async {
@@ -51,6 +79,7 @@ class UserController extends GetxController {
             username: username,
             password: password
         );
+        _myFavorites = await getMyFavorites();
         return true;
       } else {
         print("Login Error: ${response.statusCode}");
@@ -145,7 +174,7 @@ class UserController extends GetxController {
     }
   }
 
-  Future<Map<String, dynamic>> deleteAccount() async {
+  Future<Map<String, dynamic>> deleteMyAccount() async {
     if (Platform.isAndroid) {
       deleteAccountApiUrl = "http://10.0.2.2:8080/api/user/delete?id=${_user.id}";
     } else {
@@ -171,4 +200,84 @@ class UserController extends GetxController {
     }
   }
 
+  Future<Map<String, dynamic>> addToMyFavorites(int recipeId) async {
+    if (Platform.isAndroid) {
+      addToFavoritesApiUrl = "http://10.0.2.2:8080/api/user/${_user.id}/favorites/$recipeId/add";
+    } else {
+      addToFavoritesApiUrl = "http://localhost:8080/api/user/${_user.id}/favorites/$recipeId/add";
+    }
+
+    try {
+      final response = await http.post(
+        Uri.parse(addToFavoritesApiUrl),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (response.statusCode == 200) {
+        await getMyFavorites();
+        update();
+
+        return {'success': true};
+      } else {
+        return {'error': "Add to Favorites Error: ${response.statusCode}"};
+      }
+    } catch (e) {
+      return {'error': "Exception: $e"};
+    }
+  }
+
+  Future<List<RecipeDTO>> getMyFavorites() async {
+    if (Platform.isAndroid) {
+      userFavoritesApiUrl = "http://10.0.2.2:8080/api/user/${_user.id}/favorites/getall";
+    } else {
+      userFavoritesApiUrl = "http://localhost:8080/api/user/${_user.id}/favorites/getall";
+    }
+
+    try {
+      final response = await http.get(
+        Uri.parse(userFavoritesApiUrl),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> recipeJsonList = json.decode(response.body);
+        List<RecipeDTO> userFavorites = recipeJsonList.map((json) => RecipeDTO.fromJson(json)).toList();
+        _myFavorites = userFavorites;
+
+        return userFavorites;
+      } else {
+        print("Get User Favorites Error: ${response.statusCode}");
+        return [];
+      }
+    } catch (e) {
+      print("Exception: $e");
+      return [];
+    }
+  }
+
+  Future<Map<String, dynamic>> removeFromMyFavorites(int recipeId) async {
+    if (Platform.isAndroid) {
+      removeFromFavoritesApiUrl = "http://10.0.2.2:8080/api/user/${_user.id}/favorites/$recipeId/remove";
+    } else {
+      removeFromFavoritesApiUrl = "http://localhost:8080/api/user/${_user.id}/favorites/$recipeId/remove";
+    }
+
+    try {
+      final response = await http.delete(
+        Uri.parse(removeFromFavoritesApiUrl),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (response.statusCode == 200) {
+        await getMyFavorites();
+        update();
+
+        return {'success': true};
+      } else {
+        return {'error': "Remove from Favorites Error: ${response.statusCode}"};
+      }
+    } catch (e) {
+      return {'error': "Exception: $e"};
+    }
+  }
 }
