@@ -147,6 +147,62 @@ class _UserPageState extends State<UserPage> {
                       context, MaterialPageRoute(builder: (_) => MyReviewsPage()));
                 },
               ),
+              const SizedBox(height: 30),
+              OutlinedButton.icon(
+                icon: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                ),
+                label: const Text(
+                  "DELETE ACCOUNT",
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.red,
+                  ),
+                ),
+                style: ButtonStyle(
+                  iconSize: MaterialStateProperty.all(30),
+                  elevation: MaterialStateProperty.all(10),
+                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                  shadowColor: MaterialStateProperty.all(Colors.grey[800]),
+                  fixedSize: MaterialStateProperty.all(const Size(220, 70)),
+                  side: MaterialStateProperty.all(const BorderSide(width: 3, color: Colors.red)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  ),
+                ),
+                onPressed: () async {
+                  bool confirmed = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Confirm Deletion"),
+                        content: const Text("Are you sure you want to delete your account? This action cannot be undone."),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
+                            child: const Text("Cancel"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(true); // User confirmed the deletion
+                            },
+                            child: const Text("Delete"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+
+                  if (confirmed == true) {
+                    await Get.find<UserController>().deleteAccount();
+                  }
+                },
+              ),
             ]
           ),
         )

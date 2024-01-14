@@ -23,6 +23,13 @@ class UserController extends GetxController {
   late String myRecipesUrl;
   late String myReviewsUrl;
   late String deleteReviewApiUrl;
+  late String deleteAccountApiUrl;
+
+  void resetUser() {
+    _user = User(id: '', username: '', password: '');
+    _myRecipes = [];
+    _myReviews = [];
+  }
 
   Future<bool> login(String username, String password) async {
     if(Platform.isAndroid) {
@@ -137,4 +144,31 @@ class UserController extends GetxController {
       return {'error': "Exception: $e"};
     }
   }
+
+  Future<Map<String, dynamic>> deleteAccount() async {
+    if (Platform.isAndroid) {
+      deleteAccountApiUrl = "http://10.0.2.2:8080/api/user/delete?id=${_user.id}";
+    } else {
+      deleteAccountApiUrl = "http://localhost:8080/api/user/delete?id=${_user.id}";
+    }
+
+    try {
+      final response = await http.delete(
+        Uri.parse(deleteAccountApiUrl),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (response.statusCode == 200) {
+        Get.find<UserController>().resetUser();
+        Get.offAllNamed('/login');
+
+        return {'success': true};
+      } else {
+        return {'error': "Delete Account Error: ${response.statusCode}"};
+      }
+    } catch (e) {
+      return {'error': "Exception: $e"};
+    }
+  }
+
 }
