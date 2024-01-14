@@ -32,6 +32,7 @@ class _LoginState extends State<Login> {
                 hintText: 'Enter username',
               ),
             ),
+            const SizedBox(height: 5,),
             TextField(
               controller: passwordController,
               decoration: InputDecoration(

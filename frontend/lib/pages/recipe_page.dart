@@ -270,7 +270,7 @@ class ReviewList extends StatelessWidget {
                   )
                 ),
                 Text(
-                  review.comment,
+                  "💭: ${review.comment}",
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey[600],
