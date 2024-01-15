@@ -72,7 +72,8 @@ class _RecipePageState extends State<RecipePage> {
         title: Text(recipe!.title),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple.shade900,
+        foregroundColor: Colors.grey[400],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -83,7 +84,7 @@ class _RecipePageState extends State<RecipePage> {
               Text(
                 recipe!.title,
                 style: TextStyle(
-                  color: Colors.grey[600],
+                  color: Colors.grey[800],
                   letterSpacing: 2,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -92,8 +93,8 @@ class _RecipePageState extends State<RecipePage> {
               const SizedBox(height: 5),
               Text(
                 recipe!.description,
-                style: const TextStyle(
-                  color: Colors.black54,
+                style: TextStyle(
+                  color: Colors.grey[700],
                   letterSpacing: 2,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -103,7 +104,7 @@ class _RecipePageState extends State<RecipePage> {
               Text(
                 "Ingredients:",
                 style: TextStyle(
-                  color: Colors.grey[600],
+                  color: Colors.grey[800],
                   letterSpacing: 2,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -120,7 +121,7 @@ class _RecipePageState extends State<RecipePage> {
               Text(
                 "Reviews:",
                 style: TextStyle(
-                  color: Colors.grey[600],
+                  color: Colors.grey[800],
                   letterSpacing: 2,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -213,7 +214,7 @@ class IngredientList extends StatelessWidget {
                   ingredient.name,
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.grey[600],
+                    color: Colors.grey[700],
                   )
                 ),
                 Row(
@@ -223,7 +224,7 @@ class IngredientList extends StatelessWidget {
                       ingredient.quantity.toString(),
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors.grey[600],
+                        color: Colors.grey[700],
                       )
                     ),
                     const SizedBox(width: 10,),
@@ -231,7 +232,7 @@ class IngredientList extends StatelessWidget {
                       ingredient.unit,
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors.grey[600],
+                        color: Colors.grey[700],
                       )
                     ),
                   ],

@@ -20,7 +20,8 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
       appBar: AppBar(
         title: const Text("My recipes"),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple.shade900,
+        foregroundColor: Colors.grey[400],
       ),
       body: FutureBuilder<List<RecipeDTO>>(
         future: userController.getMyRecipes(),
@@ -33,11 +34,12 @@ class _MyRecipesPageState extends State<MyRecipesPage> {
             List<RecipeDTO> myRecipes = snapshot.data!;
             return SingleChildScrollView(
               child: Column(
-                children: myRecipes
-                    .map(
-                      (recipe) => MyRecipesPageRecipeList(
+                children: myRecipes.map((recipe) =>
+                  MyRecipesPageRecipeList(
                     recipe: recipe,
-                    delete: () {
+                    delete: () async {
+                      await userController.deleteMyRecipe(recipe.id);
+                      await userController.getMyRecipes();
                       setState(() {});
                     },
                   ),

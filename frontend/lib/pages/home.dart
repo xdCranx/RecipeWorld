@@ -24,23 +24,17 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text("Home page"),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple.shade900,
+        foregroundColor: Colors.grey[400],
         actions: [
           IconButton(
             onPressed: () async {
               await Get.toNamed('/userpage');
               setState(() {});
             },
-            icon: const Icon(Icons.person, size: 40),
+            icon: const Icon(Icons.person, size: 40,),
           )
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/add_recipe');
-        },
-        backgroundColor: Colors.blue,
-        child: const Icon(Icons.add),
       ),
       body: ListView(
         children: [

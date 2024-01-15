@@ -30,6 +30,7 @@ class UserController extends GetxController {
   late String addToFavoritesApiUrl;
   late String userFavoritesApiUrl;
   late String removeFromFavoritesApiUrl;
+  late String deleteMyRecipeApiUrl;
 
   void resetUser() {
     _user = User(id: '', username: '', password: '');
@@ -275,6 +276,29 @@ class UserController extends GetxController {
         return {'success': true};
       } else {
         return {'error': "Remove from Favorites Error: ${response.statusCode}"};
+      }
+    } catch (e) {
+      return {'error': "Exception: $e"};
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteMyRecipe(int recipeId) async {
+    if (Platform.isAndroid) {
+      deleteMyRecipeApiUrl = "http://10.0.2.2:8080/api/recipe";
+    } else {
+      deleteMyRecipeApiUrl = "http://localhost:8080/api/recipe";
+    }
+
+    try {
+      final response = await http.delete(
+        Uri.parse("$deleteMyRecipeApiUrl/$recipeId"),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (response.statusCode == 200) {
+        return {'success': true};
+      } else {
+        return {'error': "Delete recipe Error: ${response.statusCode}"};
       }
     } catch (e) {
       return {'error': "Exception: $e"};

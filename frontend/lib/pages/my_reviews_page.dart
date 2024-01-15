@@ -20,7 +20,8 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
       appBar: AppBar(
         title: const Text("My reviews"),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple.shade900,
+        foregroundColor: Colors.grey[400],
       ),
       body: FutureBuilder<List<ReviewDTO>>(
         future: userController.getMyReviews(),
@@ -85,7 +86,7 @@ class ReviewList extends StatelessWidget {
                     Text(
                       review.recipe.title,
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 22,
                         color: Colors.grey[800],
                       ),
                     ),
@@ -93,7 +94,7 @@ class ReviewList extends StatelessWidget {
                     Text(
                       review.recipe.author.username,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 18,
                         color: Colors.grey[400],
                       ),
                     ),
