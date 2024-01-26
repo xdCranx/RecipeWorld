@@ -44,6 +44,7 @@ class UserController extends GetxController {
     addToFavoritesApiUrl = "";
     userFavoritesApiUrl = "";
     removeFromFavoritesApiUrl = "";
+    deleteMyRecipeApiUrl = "";
   }
 
   Future<void> toggleFavorite(int recipeId) async {
@@ -83,7 +84,12 @@ class UserController extends GetxController {
         _myFavorites = await getMyFavorites();
         return true;
       } else {
-        print("Login Error: ${response.statusCode}");
+        final errorMessage = jsonDecode(response.body)['message'] ?? 'Registration failed';
+        Get.snackbar(
+          "Login Error",
+          errorMessage,
+          snackPosition: SnackPosition.TOP,
+        );
         return false;
       }
     } catch (e) {

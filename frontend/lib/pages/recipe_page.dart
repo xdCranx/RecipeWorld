@@ -253,7 +253,7 @@ class ReviewList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.blue[100],
+      color: Colors.purple[800],
       margin: const EdgeInsets.fromLTRB(0, 16, 0, 0),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -267,14 +267,14 @@ class ReviewList extends StatelessWidget {
                   review.user.username,
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.grey[900],
+                    color: Colors.grey[400],
                   )
                 ),
                 Text(
                   "💭: ${review.comment}",
                   style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
+                    fontSize: 15,
+                    color: Colors.grey[200],
                   )
                 ),
               ],
