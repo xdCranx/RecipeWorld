@@ -17,12 +17,21 @@ String? _chosenCategory;
 
 class _HomePageState extends State<HomePage> {
   final HomeController homeController = Get.put(HomeController());
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home page"),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.logout_rounded,
+          ),
+          onPressed: () {
+            Get.back();
+          },
+        ),
         centerTitle: true,
         backgroundColor: Colors.purple.shade900,
         foregroundColor: Colors.grey[400],
@@ -36,7 +45,7 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: ListView(
+      body: Column(
         children: [
           const SizedBox(height: 20),
           Row(
@@ -51,11 +60,21 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: const Text('Filter'),
               ),
-              const SizedBox(
+              SizedBox(
                 width: 150,
                 height: 50,
                 child: TextField(
-                  decoration: InputDecoration(
+                  controller: searchController,
+                  onSubmitted: (value) async {
+                      if (value.isNotEmpty) {
+                        await homeController.getRecipesByTitle(value);
+                      }
+                      else {
+                        await homeController.getAllRecipes();
+                      }
+                    setState(() {});
+                  },
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Search',
                   ),
@@ -63,23 +82,19 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          FutureBuilder<List<RecipeDTO>>(
-            future: homeController.getAllRecipes(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
+          Expanded(
+            child: Obx(() {
+              final List<RecipeDTO> listOfRecipes = homeController.listOfRecipes.toList();
+              if (listOfRecipes.isEmpty) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text("Error: ${snapshot.error}"));
               } else {
-                List<RecipeDTO> recipes = snapshot.data!;
-                return Column(
-                  children: recipes.map((recipe) => HomePageRecipeList(
-                      recipe: recipe,
-                    ),
-                  ).toList(),
+                return ListView(
+                  children: listOfRecipes.map((recipe) => HomePageRecipeList(
+                    recipe: recipe,
+                  )).toList(),
                 );
               }
-            },
+            }),
           ),
           const SizedBox(height: 30),
         ],

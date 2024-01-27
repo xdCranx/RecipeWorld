@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:recipe_world2/DTOs/recipe_dto.dart';
@@ -89,6 +91,13 @@ class UserController extends GetxController {
           "Login Error",
           errorMessage,
           snackPosition: SnackPosition.TOP,
+          colorText: Colors.grey[200],
+          backgroundColor: Colors.grey[400],
+          backgroundGradient: LinearGradient(
+            colors: [Colors.purple.withOpacity(0.7), Colors.purple.shade900],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
         );
         return false;
       }
@@ -226,8 +235,22 @@ class UserController extends GetxController {
 
         return {'success': true};
       } else {
-        return {'error': "Add to Favorites Error: ${response.statusCode}"};
+        final errorMessage = jsonDecode(response.body)['message'] ??
+            'Invalid Action';
+        Get.snackbar(
+          "Invalid Action",
+          errorMessage,
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.grey[200],
+          backgroundColor: Colors.grey[400],
+          backgroundGradient: LinearGradient(
+            colors: [Colors.purple.withOpacity(0.7), Colors.purple.shade900],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        );
       }
+      return {'error': "Error"};
     } catch (e) {
       return {'error': "Exception: $e"};
     }
