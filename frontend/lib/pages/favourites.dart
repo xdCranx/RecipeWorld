@@ -20,7 +20,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
       appBar: AppBar(
         title: const Text("My favorites"),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple.shade900,
+        foregroundColor: Colors.grey[400],
       ),
       body: FutureBuilder<List<RecipeDTO>>(
         future: userController.getMyFavorites(),
@@ -95,7 +96,7 @@ class FavoritesPageRecipeList extends StatelessWidget {
                     ),
                     const SizedBox(height: 15),
                     Text(
-                      "🕒: ${recipe.prepTime}min",
+                      "${recipe.category.name.toUpperCase()} | 🕒: ${recipe.prepTime}min",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.grey[600],

@@ -37,6 +37,9 @@ class UserService(
         if (usernameExists) {
             throw IllegalArgumentException("User with username ${user.username} already exists.")
         }
+        if (user.username.isEmpty() || user.password.isEmpty()) {
+            throw IllegalArgumentException("Credentials missing.")
+        }
         userRepository.save(user)
     }
 

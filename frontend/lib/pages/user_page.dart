@@ -23,7 +23,8 @@ class _UserPageState extends State<UserPage> {
         title: const Text("User profile",),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple.shade900,
+        foregroundColor: Colors.grey[400],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -34,15 +35,44 @@ class _UserPageState extends State<UserPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               const SizedBox(height: 20,),
-              Text(
-                loggedUser.username,
-                style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 55,
-                    fontWeight: FontWeight.bold
-                )
+              Material(
+                elevation: 10,
+                borderRadius: BorderRadius.circular(20.0),
+                color: Colors.transparent,
+                shadowColor: Colors.black,
+                borderOnForeground: true,
+                child: Container(
+                  width: 300,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.purple.shade900,
+                        Colors.purple.shade500,
+                        Colors.purple.shade900
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20.0),
+                    border: Border.all(
+                      color: Colors.purple.shade900,
+                      width: 5,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      loggedUser.username,
+                      style: TextStyle(
+                        color: Colors.grey[900],
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
               ),
-              const SizedBox(height: 70,),
+              const SizedBox(height: 40,),
               OutlinedButton.icon(
                 icon: const Icon(Icons.add_circle_outline),
                 label: const Text(
