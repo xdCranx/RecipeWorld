@@ -4,6 +4,7 @@ import 'package:recipe_world2/DTOs/recipe_dto.dart';
 import 'package:recipe_world2/controllers/home_controller.dart';
 import 'package:recipe_world2/controllers/user_controller.dart';
 import 'package:recipe_world2/pages/recipe_page.dart';
+import 'package:recipe_world2/services/category_filter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -51,15 +52,16 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ElevatedButton(
+              /*ElevatedButton(
                 onPressed: () {
-                  // TODO: IMPLEMENT FILTERING
+
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(),
                 ),
                 child: const Text('Filter'),
-              ),
+              ),*/
+              FilterButton(),
               SizedBox(
                 width: 150,
                 height: 50,

@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:popover/popover.dart';
+import 'package:recipe_world2/controllers/home_controller.dart';
+import 'package:get/get.dart';
+import 'package:recipe_world2/DTOs/category_dto.dart';
+
 
 enum Categories { drink, breakfast, lunch, diner }
+HomeController homeController1 = Get.put(HomeController());
+List<CategoryDTO> listOfCategories2 = homeController1.listOfCategories.toList();
+
+
 
 
 class FilterCategoriesChip extends StatefulWidget {
+
   const FilterCategoriesChip({super.key});
 
   @override
   State<FilterCategoriesChip> createState() => _FilterCategoriesChipState();
 }
-
+//List<CategoryDTO> Cat= homeController.listOfCategories.toList();
 class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
-  Set<Categories> filters = <Categories>{};
+  final HomeController homeController = Get.put(HomeController());
+
+  //Set<Categories> filters = <Categories>{};
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +34,8 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
 
-          Wrap(
+          /*Wrap(
+
             spacing: 5.0,
             children: Categories.values.map((Categories exercise) {
               return FilterChip(
@@ -40,11 +52,27 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
                 },
               );
             }).toList(),
+          ),*/
+          Expanded(
+            child: Obx(() {
+              //final List<CategoryDTO> listOfCategories = homeController.listOfCategories.toList();
+              //if (listOfCategories.isEmpty) {
+
+                //return const Center(child: CircularProgressIndicator());
+              //} else {
+                return ListView(
+                  children: listOfCategories2.map((recipe) => Text(
+                    '$recipe',
+                  )).toList(),
+                );
+              }
+            //}
+    ),
           ),
           const SizedBox(height: 10.0),
           Text(
-            'Looking for: ${filters.map((Categories e) => e.name).join(', ')}',
-
+            //'Looking for: ${filters.map((Categories e) => e.name).join(', ')}',
+'test'
           ),
         ],
       ),
