@@ -42,7 +42,7 @@ class _UserPageState extends State<UserPage> {
                 shadowColor: Colors.black,
                 borderOnForeground: true,
                 child: Container(
-                  width: 300,
+                  width: 350,
                   height: 120,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -65,7 +65,7 @@ class _UserPageState extends State<UserPage> {
                       loggedUser.username,
                       style: TextStyle(
                         color: Colors.grey[900],
-                        fontSize: 50,
+                        fontSize: (50 - (loggedUser.username.length)/1),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
