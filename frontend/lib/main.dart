@@ -26,7 +26,7 @@ class RecipeWorld extends StatelessWidget {
         GetPage(name: '/home', page: () => const HomePage() ),
         GetPage(name: '/userpage', page: () => const UserPage() ),
         GetPage(name: '/userpage', page: () => const UserPage() ),
-        GetPage(name: '/addrecipe', page: () => const AddRecipePage() ),
+        GetPage(name: '/addrecipe', page: () =>  AddRecipePage() ),
       ],
     );
   }
