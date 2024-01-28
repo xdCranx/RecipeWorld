@@ -6,6 +6,7 @@ import 'package:recipe_world2/controllers/user_controller.dart';
 import 'package:recipe_world2/pages/recipe_page.dart';
 import 'package:recipe_world2/services/category_filter.dart';
 
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -14,7 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 List<String> categories = ["Breakfast", "Dinner", "Lunch", "Drink"];
-String? _chosenCategory;
+//String? _chosenCategory;
 
 class _HomePageState extends State<HomePage> {
   final HomeController homeController = Get.put(HomeController());
@@ -82,10 +83,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
+
             ],
+
           ),
           Expanded(
             child: Obx(() {
+
               final List<RecipeDTO> listOfRecipes = homeController.listOfRecipes.toList();
               if (listOfRecipes.isEmpty) {
                 return const Center(child: CircularProgressIndicator());

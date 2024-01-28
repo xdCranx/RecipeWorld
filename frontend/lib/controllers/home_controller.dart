@@ -91,6 +91,7 @@ class HomeController extends GetxController {
       final response = await http.get(
         Uri.parse(apiUrlCategories),
       );
+      print(response);
 
       if (response.statusCode == 200) {
         List<dynamic> categoryJsonList = jsonDecode(response.body);

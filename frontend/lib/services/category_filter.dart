@@ -7,6 +7,7 @@ import 'package:recipe_world2/DTOs/category_dto.dart';
 
 enum Categories { drink, breakfast, lunch, diner }
 HomeController homeController1 = Get.put(HomeController());
+//homeController1.getAllCategories();
 List<CategoryDTO> listOfCategories2 = homeController1.listOfCategories.toList();
 
 
@@ -22,8 +23,7 @@ class FilterCategoriesChip extends StatefulWidget {
 //List<CategoryDTO> Cat= homeController.listOfCategories.toList();
 class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
   final HomeController homeController = Get.put(HomeController());
-
-  //Set<Categories> filters = <Categories>{};
+  Set<CategoryDTO> filters = <CategoryDTO>{};
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,6 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
         children: <Widget>[
 
           /*Wrap(
-
             spacing: 5.0,
             children: Categories.values.map((Categories exercise) {
               return FilterChip(
@@ -55,24 +54,38 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
           ),*/
           Expanded(
             child: Obx(() {
-              //final List<CategoryDTO> listOfCategories = homeController.listOfCategories.toList();
-              //if (listOfCategories.isEmpty) {
+              homeController.getAllCategories();
+              final List<CategoryDTO> listOfCategories = homeController.listOfCategories.toList();
+              if (listOfCategories.isEmpty) {
 
-                //return const Center(child: CircularProgressIndicator());
-              //} else {
-                return ListView(
-                  children: listOfCategories2.map((recipe) => Text(
-                    '$recipe',
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                return Wrap(
+                  spacing: 10,
+                  alignment: WrapAlignment.spaceAround,
+                  children: listOfCategories2.map((category) => FilterChip(
+                    label: Text(category.name),
+                    selected: filters.contains(category),
+                    onSelected: (bool selected) {
+                      setState(() {
+                        if (selected) {
+                          filters.add(category);
+                        } else {
+                          filters.remove(category);
+                        }
+                      });
+                    },
+
                   )).toList(),
                 );
               }
-            //}
+            }
     ),
           ),
           const SizedBox(height: 10.0),
           Text(
-            //'Looking for: ${filters.map((Categories e) => e.name).join(', ')}',
-'test'
+            'Looking for: ${filters.map(( CategoryDTO e) => e.name).join(', ')}',
+
           ),
         ],
       ),
