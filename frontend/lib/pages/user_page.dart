@@ -20,7 +20,11 @@ class _UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("User profile",),
+        title: const Text("User profile",
+            style: TextStyle(
+                fontWeight: FontWeight.bold
+            )
+        ),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.purple.shade900,
@@ -64,7 +68,7 @@ class _UserPageState extends State<UserPage> {
                     child: Text(
                       loggedUser.username,
                       style: TextStyle(
-                        color: Colors.grey[900],
+                        color: Colors.grey[300],
                         fontSize: (50 - (loggedUser.username.length)/1),
                         fontWeight: FontWeight.bold,
                       ),
@@ -94,7 +98,9 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Get.toNamed("/addrecipe");
+                },
               ),
               const SizedBox(height: 30),
               OutlinedButton.icon(
