@@ -1,6 +1,5 @@
 package com.theSPGgroup.RecipeWorld.Ingredients
 
-import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredient
 import jakarta.persistence.*
 
 @Entity
@@ -17,6 +16,4 @@ data class Ingredient(
     @Column(nullable = false)
     val unit: IngredientUnit,
 
-    @OneToMany(mappedBy = "ingredient")
-    val ingredientRecipes: MutableSet<RecipeIngredient> = mutableSetOf()
 )

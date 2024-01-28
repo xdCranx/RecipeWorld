@@ -19,6 +19,6 @@ data class Review(
     @JoinColumn(name = "recipe_id", nullable = false)
     val recipe: Recipe,
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     val comment: String
 )

@@ -1,6 +1,6 @@
 package com.theSPGgroup.RecipeWorld.User
 
-import com.theSPGgroup.RecipeWorld.UserDTOMapper
+import com.theSPGgroup.RecipeWorld.Recipe.RecipeDTO
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -39,6 +39,10 @@ class UserController(@Autowired val userService: UserService) {
         return ResponseEntity.ok(HttpStatus.OK)
     }
 
+    @GetMapping("/{userId}/favorites/getall")
+    fun getFavouriteRecipes(@PathVariable userId: String): List<RecipeDTO>{
+        return userService.getUserFavoriteRecipes(userId)
+    }
     @PostMapping("/{userId}/favorites/{recipeId}/add")
     fun addRecipeToFavorites(
         @PathVariable userId: String,

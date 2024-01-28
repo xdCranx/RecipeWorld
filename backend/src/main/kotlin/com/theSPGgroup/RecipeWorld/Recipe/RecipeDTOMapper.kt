@@ -1,6 +1,6 @@
 package com.theSPGgroup.RecipeWorld.Recipe
 
-import com.theSPGgroup.RecipeWorld.UserDTOMapper
+import com.theSPGgroup.RecipeWorld.RecipeIngredient.RecipeIngredientDTOMapper.Companion.mapRecipeIngredientToRecipeIngredientDTO
 
 class RecipeDTOMapper {
     companion object {
@@ -13,7 +13,9 @@ class RecipeDTOMapper {
                 prepTime = recipe.prepTime,
                 category = recipe.category,
                 author = UserDTOMapper.mapUserToUserDTO(recipe.author),
-                recipeIngredients = recipe.recipeIngredients
+                recipeIngredients = recipe.recipeIngredients.map { ingredient ->
+                    mapRecipeIngredientToRecipeIngredientDTO(ingredient)
+                }
             )
         }
     }
