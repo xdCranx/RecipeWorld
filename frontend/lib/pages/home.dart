@@ -4,6 +4,9 @@ import 'package:recipe_world2/DTOs/recipe_dto.dart';
 import 'package:recipe_world2/controllers/home_controller.dart';
 import 'package:recipe_world2/controllers/user_controller.dart';
 import 'package:recipe_world2/pages/recipe_page.dart';
+import 'package:recipe_world2/services/category_filter.dart';
+import 'package:recipe_world2/services/sort_box.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,11 +16,12 @@ class HomePage extends StatefulWidget {
 }
 
 List<String> categories = ["Breakfast", "Dinner", "Lunch", "Drink"];
-String? _chosenCategory;
+//String? _chosenCategory;
 
 class _HomePageState extends State<HomePage> {
   final HomeController homeController = Get.put(HomeController());
   TextEditingController searchController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +59,14 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  // TODO: IMPLEMENT FILTERING
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(),
-                ),
-                child: const Text('Filter'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+
+                children: [
+                  FilterButton(),
+                  SizedBox(width: 10),
+                  SortButton(),
+                ],
               ),
               SizedBox(
                 width: 150,
@@ -84,10 +88,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
+
             ],
+
           ),
           Expanded(
             child: Obx(() {
+
               final List<RecipeDTO> listOfRecipes = homeController.listOfRecipes.toList();
               if (listOfRecipes.isEmpty) {
                 return const Center(child: CircularProgressIndicator());
