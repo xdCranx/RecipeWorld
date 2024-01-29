@@ -287,19 +287,11 @@ class _AddRecipePageState extends State<AddRecipePage> {
                 borderRadius: BorderRadius.circular(25.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    try {
-                      addRecipeController.addRecipe(
-                          userId: Get.find<UserController>().user.id,
-                          categoryId: addRecipeController.chosenCategory!.id,
-                          title: recipeNameController.text,
-                          description: recipeDescriptionController.text,
-                          ingredients:
-                              addRecipeController.listOfIngredientAndQuantities,
-                          prepTime: int.parse(recipePrepTimeController.text));
-                    } catch (e) {
+                    if (addRecipeController.listOfIngredientAndQuantities
+                        .any((tuple) => tuple.item2 == 0)) {
                       Get.snackbar(
                         "Invalid action",
-                        "All fields must be filled",
+                        "Ingredients cannot have empty quantity field",
                         snackPosition: SnackPosition.TOP,
                         colorText: Colors.grey[200],
                         backgroundColor: Colors.grey[400],
@@ -312,6 +304,33 @@ class _AddRecipePageState extends State<AddRecipePage> {
                           end: Alignment.bottomCenter,
                         ),
                       );
+                    } else {
+                      try {
+                        addRecipeController.addRecipe(
+                            userId: Get.find<UserController>().user.id,
+                            categoryId: addRecipeController.chosenCategory!.id,
+                            title: recipeNameController.text,
+                            description: recipeDescriptionController.text,
+                            ingredients: addRecipeController
+                                .listOfIngredientAndQuantities,
+                            prepTime: int.parse(recipePrepTimeController.text));
+                      } catch (e) {
+                        Get.snackbar(
+                          "Invalid action",
+                          "All fields must be filled",
+                          snackPosition: SnackPosition.TOP,
+                          colorText: Colors.grey[200],
+                          backgroundColor: Colors.grey[400],
+                          backgroundGradient: LinearGradient(
+                            colors: [
+                              Colors.purple.withOpacity(0.7),
+                              Colors.purple.shade900
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                        );
+                      }
                     }
                   },
                   child: const Padding(

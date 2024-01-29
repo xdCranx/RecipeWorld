@@ -5,7 +5,7 @@ class RecipeRequest {
   final int categoryId;
   final String title;
   final String description;
-  final List<Tuple2<int, int>> ingredients;
+  final List<Tuple2<int, double>> ingredients;
   //first is id and second is quantity
   final int prepTime;
 

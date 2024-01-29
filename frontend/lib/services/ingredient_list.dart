@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:recipe_world2/controllers/add_recipe_controller.dart';
 
 import '../DTOs/ingredient.dart';
@@ -49,13 +49,19 @@ class IngredientButtons extends StatelessWidget {
                           width: 60,
                           height: 30,
                           child: TextField(
+                            keyboardType: const TextInputType.numberWithOptions(
+                                decimal: true),
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+\.?\d*$')),
+                            ],
                             style: const TextStyle(
                               fontSize: 10,
                             ),
                             controller: quantityController,
-                            onSubmitted: (value) {
+                            onChanged: (value) {
                               addRecipeController.updateIngredientQuantities(
-                                  ingredient.id, int.parse(value));
+                                  ingredient.id, double.parse(value));
                             },
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),

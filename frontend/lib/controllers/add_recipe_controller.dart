@@ -14,8 +14,8 @@ class AddRecipeController extends GetxController {
   RxList<CategoryDTO> listOfCategories = <CategoryDTO>[].obs;
   RxList<Ingredient> listOfAddedIngredients = <Ingredient>[].obs;
   CategoryDTO? chosenCategory;
-  RxList<Tuple2<int, int>> listOfIngredientAndQuantities =
-      <Tuple2<int, int>>[].obs;
+  RxList<Tuple2<int, double>> listOfIngredientAndQuantities =
+      <Tuple2<int, double>>[].obs;
 
   late String apiUrl = Platform.isAndroid
       ? "http://10.0.2.2:8080/api"
@@ -71,7 +71,7 @@ class AddRecipeController extends GetxController {
     required int categoryId,
     required String title,
     required String description,
-    required List<Tuple2<int, int>> ingredients,
+    required List<Tuple2<int, double>> ingredients,
     required int prepTime,
   }) async {
     try {
@@ -136,7 +136,7 @@ class AddRecipeController extends GetxController {
     listOfAddedIngredients.add(ingredient);
   }
 
-  void updateIngredientQuantities(int ingredientId, int quantity) {
+  void updateIngredientQuantities(int ingredientId, double quantity) {
     int existingIndex = listOfIngredientAndQuantities.indexWhere(
       (tuple) => tuple.item1 == ingredientId,
     );
