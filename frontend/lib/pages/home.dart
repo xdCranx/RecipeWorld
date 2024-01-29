@@ -5,6 +5,7 @@ import 'package:recipe_world2/controllers/home_controller.dart';
 import 'package:recipe_world2/controllers/user_controller.dart';
 import 'package:recipe_world2/pages/recipe_page.dart';
 import 'package:recipe_world2/services/category_filter.dart';
+import 'package:recipe_world2/services/sort_box.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -20,6 +21,7 @@ List<String> categories = ["Breakfast", "Dinner", "Lunch", "Drink"];
 class _HomePageState extends State<HomePage> {
   final HomeController homeController = Get.put(HomeController());
   TextEditingController searchController = TextEditingController();
+  TextEditingController searchController2 = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,16 +55,15 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              /*ElevatedButton(
-                onPressed: () {
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
 
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(),
-                ),
-                child: const Text('Filter'),
-              ),*/
-              FilterButton(),
+                children: [
+                  FilterButton(),
+                  SizedBox(width: 10),
+                  SortButton(),
+                ],
+              ),
               SizedBox(
                 width: 150,
                 height: 50,

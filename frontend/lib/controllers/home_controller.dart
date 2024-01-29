@@ -132,4 +132,31 @@ class HomeController extends GetxController {
       throw Exception("Error: $e");
     }
   }
+
+
+  Future<void> getRecipesByPrepTime(int filter) async {
+    try {
+      print("Fetching recipes by category");
+      final response = await http.get(
+          Uri.parse("$apiUrl/prep-time/${(filter)}")
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> recipeJsonList = jsonDecode(response.body);
+        List<RecipeDTO> recipes = recipeJsonList.map((json) =>
+            RecipeDTO.fromJson(json)).toList();
+
+        if ((recipes).isEmpty) {
+
+        } else{
+          listOfRecipes.assignAll(recipes);
+
+        }
+      } else {
+        throw Exception("Failed to fetch recipes by category. Status code: "
+            "${response.statusCode}.");
+      }
+    } catch(e) {
+      throw Exception("Error occurred: $e");
+    }
+  }
 }

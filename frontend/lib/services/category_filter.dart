@@ -85,6 +85,8 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
             else
               homeController.getAllRecipes();
 
+            homeController.listOfRecipes.sort((a,b) => a.title.compareTo(b.title));
+
           }, child: Text("Filter"))
         ],
       ),
@@ -124,11 +126,11 @@ class _FilterButtonState extends State<FilterButton> {
           padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
             border: Border.all(
-                color: Colors.grey,
+                color: Colors.deepPurple,
                 width: 1.5
             ),
             borderRadius: BorderRadius.all(Radius.circular(5)),
-            color: Colors.grey[200],
+            color: Colors.white,
           ),
           child: Text("Filter",
             style: TextStyle(
