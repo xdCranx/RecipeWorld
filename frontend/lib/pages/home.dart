@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: const Text('Filter'),
               ),*/
-              FilterButton(homeController: homeController,),
+              FilterButton(),
               SizedBox(
                 width: 150,
                 height: 50,

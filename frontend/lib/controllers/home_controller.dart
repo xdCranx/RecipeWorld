@@ -72,8 +72,8 @@ class HomeController extends GetxController {
         List<dynamic> recipeJsonList = jsonDecode(response.body);
         List<RecipeDTO> recipes = recipeJsonList.map((json) =>
             RecipeDTO.fromJson(json)).toList();
-        listOfRecipes = RxList(recipes);
-        return listOfRecipes;
+
+        return RxList(recipes);
       } else {
         throw Exception("Failed to fetch recipes. Status code: "
             "${response.statusCode}.");
@@ -83,7 +83,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<List<RecipeDTO>> getRecipesByCategory(CategoryDTO filter) async {
+  Future<void> getRecipesByCategory(CategoryDTO filter) async {
     try {
       print("Fetching recipes by category");
       final response = await http.get(
@@ -95,10 +95,10 @@ class HomeController extends GetxController {
             RecipeDTO.fromJson(json)).toList();
 
         if ((recipes).isEmpty) {
-          return getRecipesByCategory(filter);
+
         } else{
-          listOfRecipes = RxList(recipes);
-          return listOfRecipes;
+          listOfRecipes.assignAll(recipes);
+
         }
       } else {
         throw Exception("Failed to fetch recipes by category. Status code: "

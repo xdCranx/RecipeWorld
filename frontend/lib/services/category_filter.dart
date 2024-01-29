@@ -13,18 +13,17 @@ List<CategoryDTO> listOfCategories2 = homeController1.listOfCategories.toList();
 
 
 class FilterCategoriesChip extends StatefulWidget {
-  HomeController homeController;
 
-   FilterCategoriesChip({super.key, required this.homeController});
+   FilterCategoriesChip({super.key});
 
   @override
-  State<FilterCategoriesChip> createState() => _FilterCategoriesChipState(homeController: homeController);
+  State<FilterCategoriesChip> createState() => _FilterCategoriesChipState();
 }
 //List<CategoryDTO> Cat= homeController.listOfCategories.toList();
 class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
-  //final HomeController homeController = Get.put(HomeController());
-  HomeController homeController;
-  _FilterCategoriesChipState({required this.homeController});
+  final HomeController homeController = Get.find<HomeController>();
+
+  _FilterCategoriesChipState();
   Set<CategoryDTO> filters = <CategoryDTO>{};
 
   @override
@@ -40,7 +39,7 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
             child: Obx(() {
 
               final List<CategoryDTO> listOfCategories = homeController.listOfCategories.toList();
-              //homeController.categoryFilters.clear();
+
               if (listOfCategories.isEmpty) {
 
                 return const Center(child: CircularProgressIndicator());
@@ -74,10 +73,12 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
             'Looking for: ${filters.map(( CategoryDTO e) => e.name).join(', ')}\n',),
 
           ElevatedButton(onPressed: (){
-            setState(() {
-              homeController.categoryFilters = RxList.from(filters);
+            homeController.categoryFilters = RxList.from(filters);
+            if(homeController.categoryFilters.isNotEmpty)
               homeController.getRecipesByCategory(homeController.categoryFilters[0]);
-            });
+            else
+              homeController.getAllRecipes();
+
 
 
           }, child: Text("Filter"))
@@ -92,16 +93,15 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
 
 
 class FilterButton extends StatefulWidget {
-  HomeController homeController;
-  FilterButton({super.key, required this.homeController});
+  FilterButton({super.key});
 
   @override
-  State<FilterButton> createState() => _FilterButtonState(homeController: homeController);
+  State<FilterButton> createState() => _FilterButtonState();
 }
 
 class _FilterButtonState extends State<FilterButton> {
-  HomeController homeController;
-  _FilterButtonState({required this.homeController});
+  _FilterButtonState();
+  final HomeController homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +111,8 @@ class _FilterButtonState extends State<FilterButton> {
         homeController1.categoryFilters.clear();
         showPopover(context: context, bodyBuilder: (context)=> Container(
           height: 180,
-          child: FilterCategoriesChip(homeController: homeController,),
+          width: 370,
+          child: FilterCategoriesChip(),
 
         ));
       },
