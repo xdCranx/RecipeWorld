@@ -42,18 +42,22 @@ class PopupMenu extends StatelessWidget {
           }),
         );
       },
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.purple.shade900, width: 2),
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
-        ),
-        child: Text(
-          "Choose ingredients",
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.grey[600],
-            fontWeight: FontWeight.bold,
+      child: Material(
+        elevation: 8,
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.purple.shade900, width: 2),
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+          ),
+          child: Text(
+            "Choose ingredients",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.grey[600],
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

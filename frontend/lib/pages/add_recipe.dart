@@ -127,24 +127,28 @@ class _AddRecipePageState extends State<AddRecipePage> {
                         _chosenCategory = newValue;
                       });
                     },
-                    hint: Container(
-                      width: 200,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.purple.shade900,
-                          width: 2.5
+                    hint: Material(
+                      elevation: 8,
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Container(
+                        width: 200,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.purple.shade900,
+                            width: 2.5
+                          ),
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Choose category",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
+                        child: Center(
+                          child: Text(
+                            "Choose category",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
+                          ),
                         ),
                       ),
                     ),
@@ -229,17 +233,21 @@ class _AddRecipePageState extends State<AddRecipePage> {
                 ),
               ),
               const SizedBox(height: 25),
-              ElevatedButton(
-                onPressed: () {
-                  Get.close(1);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text(
-                    "CONFIRM",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+              Material(
+                elevation: 8,
+                borderRadius: BorderRadius.circular(25.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Get.close(1);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
+                      "CONFIRM",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
