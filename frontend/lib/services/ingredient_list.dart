@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'ingredient.dart';
+
+import '../DTOs/ingredient.dart';
 
 class IngredientButtons extends StatelessWidget {
   final Ingredient ingredient;
@@ -8,13 +9,13 @@ class IngredientButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
+      margin: const EdgeInsets.fromLTRB(8, 16, 16, 4),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(5.0),
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
-              side: BorderSide(width: 0.01,color: Colors.transparent),
-              shape: RoundedRectangleBorder()),
+              side: const BorderSide(width: 0.01,color: Colors.transparent),
+              shape: const RoundedRectangleBorder()),
           onPressed: (){},
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -30,9 +31,9 @@ class IngredientButtons extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: SizedBox( width: 60, height:30,
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: SizedBox( width:60, height:30,
 
                           child: TextField(
                             decoration: InputDecoration(
@@ -43,6 +44,7 @@ class IngredientButtons extends StatelessWidget {
                       ),
                       Text(ingredient.unit,style: TextStyle(
                         fontSize: 16,
+                        fontWeight: FontWeight.bold,
                         color: Colors.grey[500],
                       )
                       ),

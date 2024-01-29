@@ -5,9 +5,12 @@ import 'package:get/get.dart';
 import 'package:recipe_world2/DTOs/category_dto.dart';
 import 'package:recipe_world2/DTOs/ingredient.dart';
 
+import '../DTOs/recipe_request.dart';
+
 class AddRecipeController extends GetxController {
   RxList<Ingredient> listOfIngredients = <Ingredient>[].obs;
   RxList<CategoryDTO> listOfCategories = <CategoryDTO>[].obs;
+  RxList<Ingredient> listOfAddedIngredients = <Ingredient>[].obs;
 
 
   late String apiUrl = Platform.isAndroid
@@ -30,7 +33,6 @@ class AddRecipeController extends GetxController {
         List<Ingredient> ingredients = ingredientsJsonList.map((json) =>
             Ingredient.fromJson(json)).toList();
         listOfIngredients.assignAll(ingredients);
-        print(listOfIngredients.length);
       } else {
         throw Exception("Response error:${response.body}");
       }
@@ -50,7 +52,6 @@ class AddRecipeController extends GetxController {
         List<CategoryDTO> categories = categoriesJsonList.map((json) =>
             CategoryDTO.fromJson(json)).toList();
         listOfCategories.assignAll(categories);
-        print(listOfCategories.length);
       } else {
         throw Exception("Response error:${response.body}");
       }
@@ -59,5 +60,47 @@ class AddRecipeController extends GetxController {
     }
   }
 
+  Future<void> addRecipe({
+    required String userId,
+    required int categoryId,
+    required String title,
+    required String description,
+    required List<Map<String, dynamic>> ingredients,
+    required int prepTime,
+  }) async {
+    try {
+      RecipeRequest recipeRequest = RecipeRequest(
+        userId: userId,
+        categoryId: categoryId,
+        title: title,
+        description: description,
+        ingredients: ingredients,
+        prepTime: prepTime,
+      );
+
+      Map<String, dynamic> requestBody = recipeRequest.toJson();
+
+
+      final response = await http.post(
+        Uri.parse('$apiUrl/recipe'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(requestBody),
+      );
+
+      if (response.statusCode == 200) {
+        print('Recipe added successfully!');
+      } else {
+        print('Error adding recipe: ${response.statusCode}');
+      }
+    } catch (e) {
+
+      print('Error: $e');
+    }
+  }
+
+  void updateIngredientLists(Ingredient ingredient){
+    listOfIngredients.remove(ingredient);
+    listOfAddedIngredients.add(ingredient);
+  }
 
 }

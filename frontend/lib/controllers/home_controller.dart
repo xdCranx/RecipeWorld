@@ -36,7 +36,6 @@ class HomeController extends GetxController {
 
   Future<List<RecipeDTO>> getRecipesByTitle(String search) async {
     try {
-      print("It tries");
       final response = await http.get(
         Uri.parse("$apiUrl/title/$search")
       );
@@ -48,7 +47,7 @@ class HomeController extends GetxController {
         if ((recipes).isEmpty) {
           return getRecipesByIngredient(search);
         } else{
-          listOfRecipes = RxList(recipes);
+          listOfRecipes.assignAll(recipes);
           return listOfRecipes;
         }
       } else {
@@ -69,7 +68,7 @@ class HomeController extends GetxController {
         List<dynamic> recipeJsonList = jsonDecode(response.body);
         List<RecipeDTO> recipes = recipeJsonList.map((json) =>
             RecipeDTO.fromJson(json)).toList();
-        listOfRecipes = RxList(recipes);
+        listOfRecipes.assignAll(recipes);
         return listOfRecipes;
       } else {
         throw Exception("Failed to fetch recipes. Status code: "
