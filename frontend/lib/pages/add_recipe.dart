@@ -92,7 +92,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
                     dropdownColor: Colors.purple.withAlpha(150),
                     elevation: 9,
                     underline: Container(
-                      height: 1,
+                      height: 0,
                       color: Colors.purple.withOpacity(0.5),
                     ),
                     borderRadius: BorderRadius.circular(30.0),
@@ -104,7 +104,6 @@ class _AddRecipePageState extends State<AddRecipePage> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 3.0),
                             child: Container(
-                              // height: 100.0,
                               decoration: BoxDecoration(
                                   color: Colors.purple.shade200,
                                   borderRadius: BorderRadius.circular(20.0),
@@ -128,12 +127,26 @@ class _AddRecipePageState extends State<AddRecipePage> {
                         _chosenCategory = newValue;
                       });
                     },
-                    hint: Text(
-                      "Choose category",
-                      style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
+                    hint: Container(
+                      width: 200,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.purple.shade900,
+                          width: 2.5
+                        ),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Choose category",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
                     ),
                     icon: const SizedBox.shrink(),
                     isExpanded: true,
@@ -144,39 +157,36 @@ class _AddRecipePageState extends State<AddRecipePage> {
               const SizedBox(
                 height: 20,
               ),
-              Obx(() {
-                return PopupMenu(
-                    children: addRecipeController.listOfIngredients
-                        .map((ingredient) =>
-                        ElevatedButton(
-                            onPressed: () {
-                              addRecipeController.updateIngredientLists(ingredient);
-                              },
-                            child: Text(ingredient.name)))
-                        .toList());
-              }),
-              const SizedBox(height: 10,),
-              Obx(() {
-                return Container(
+              PopupMenu(),
+              const SizedBox(
+                height: 10,
+              ),
+              Material(
+                elevation: 5, // Set the elevation for the shadow effect
+                borderRadius: BorderRadius.circular(20.0),
+                child: Container(
+                  width: 370,
                   height: 200,
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.purple.shade900,
-                      width: 2
+                      width: 2,
                     ),
-                    borderRadius: BorderRadius.circular(20.0)
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: addRecipeController.listOfAddedIngredients
-                          .map((ingredient) => IngredientButtons(
-                                ingredient: ingredient,
-                              ))
-                          .toList(),
-                    ),
-                  ),
-                );
-              }),
+                  child: Obx(() {
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: addRecipeController.listOfAddedIngredients
+                            .map((ingredient) => IngredientButtons(
+                                  ingredient: ingredient,
+                                ))
+                            .toList(),
+                      ),
+                    );
+                  }),
+                ),
+              ),
               const SizedBox(height: 20),
               Material(
                 elevation: 10,

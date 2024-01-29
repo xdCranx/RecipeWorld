@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:popover/popover.dart';
+import '../controllers/add_recipe_controller.dart';
 
 class PopupMenu extends StatelessWidget {
-  final List<ElevatedButton> children;
-
-  PopupMenu({super.key, required this.children});
+  final AddRecipeController addRecipeController =
+      Get.put(AddRecipeController());
+  PopupMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,24 +16,36 @@ class PopupMenu extends StatelessWidget {
           width: 370,
           height: 400,
           context: context,
-          bodyBuilder: (context) => SizedBox(
-            child: SingleChildScrollView(
-              child: Column(
-                children: children
-                    .map((child) => SizedBox(
-                  width: 350,
-                  child: child,
-                ))
-                    .toList(),
+          bodyBuilder: (context) => Obx(() {
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Colors.purple.shade900, width: 5),
               ),
-            ),
-          ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: addRecipeController.listOfIngredients
+                      .map((ingredient) => SizedBox(
+                            width: 350,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                addRecipeController
+                                    .updateIngredientLists(ingredient);
+                              },
+                              child: Text(ingredient.name),
+                            ),
+                          ))
+                      .toList(),
+                ),
+              ),
+            );
+          }),
         );
       },
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.deepPurpleAccent, width: 1.5),
+          border: Border.all(color: Colors.purple.shade900, width: 2),
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
         child: Text(

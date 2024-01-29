@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:recipe_world2/controllers/add_recipe_controller.dart';
 
 import '../DTOs/ingredient.dart';
 
 class IngredientButtons extends StatelessWidget {
   final Ingredient ingredient;
-  IngredientButtons({ required this.ingredient});
+  final AddRecipeController addRecipeController = Get.put(AddRecipeController());
+  IngredientButtons({super.key, required this.ingredient});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,10 @@ class IngredientButtons extends StatelessWidget {
           style: OutlinedButton.styleFrom(
               side: const BorderSide(width: 0.01,color: Colors.transparent),
               shape: const RoundedRectangleBorder()),
-          onPressed: (){},
+          onPressed: (){
+            addRecipeController.listOfAddedIngredients.remove(ingredient);
+            addRecipeController.listOfIngredients.add(ingredient);
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -50,11 +57,8 @@ class IngredientButtons extends StatelessWidget {
                       ),
                     ],
                   ),
-
-
                 ],
               ),
-
             ],
           ),
         ),
