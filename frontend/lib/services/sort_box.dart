@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:popover/popover.dart';
-import 'package:recipe_world2/DTOs/recipe_dto.dart';
 import 'package:recipe_world2/controllers/home_controller.dart';
 import 'package:get/get.dart';
-import 'package:recipe_world2/DTOs/category_dto.dart';
 
 class SortButton extends StatefulWidget {
   const SortButton({super.key});
@@ -14,7 +12,7 @@ class SortButton extends StatefulWidget {
 
 class _SortButtonState extends State<SortButton> {
   final HomeController homeController = Get.find<HomeController>();
-  TextEditingController searchController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,7 @@ class _SortButtonState extends State<SortButton> {
       onTap: () {
 
         showPopover(context: context, bodyBuilder: (context)=> Container(
-          height: 200,
+          height: 150,
           width: 300,
           color: Colors.transparent,
           alignment: Alignment.center,
@@ -40,27 +38,7 @@ class _SortButtonState extends State<SortButton> {
                 homeController.listOfRecipes.sort((a,b) => a.category.name.compareTo(b.category.name));
 
               }, child: Text("Sort by Category")),
-              SizedBox(
-                width: 150,
-                height: 50,
-                child: TextField(
-                  controller: searchController,
-                  onSubmitted: (value) async {
-                    if (value.isNotEmpty) {
 
-                      await homeController.getRecipesByPrepTime(int.parse(value));
-                    }
-                    else {
-                      await homeController.getAllRecipes();
-                    }
-                    setState(() {});
-                  },
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Search',
-                  ),
-                ),
-              ),
             ],
           ),
 

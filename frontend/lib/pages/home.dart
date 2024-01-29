@@ -21,7 +21,7 @@ List<String> categories = ["Breakfast", "Dinner", "Lunch", "Drink"];
 class _HomePageState extends State<HomePage> {
   final HomeController homeController = Get.put(HomeController());
   TextEditingController searchController = TextEditingController();
-  TextEditingController searchController2 = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {

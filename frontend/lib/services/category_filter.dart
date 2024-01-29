@@ -22,6 +22,7 @@ class FilterCategoriesChip extends StatefulWidget {
 
 class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
   final HomeController homeController = Get.find<HomeController>();
+  TextEditingController searchController = TextEditingController();
 
   _FilterCategoriesChipState();
   Set<CategoryDTO> filters = <CategoryDTO>{};
@@ -63,6 +64,7 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
                   )).toList(),
                 );
               }
+
             }
          ),
           ),
@@ -87,7 +89,30 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
 
             homeController.listOfRecipes.sort((a,b) => a.title.compareTo(b.title));
 
-          }, child: Text("Filter"))
+          }, child: Text("Filter")),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: 160,
+            height: 50,
+            child: TextField(
+              controller: searchController,
+              onSubmitted: (value) async {
+                if (value.isNotEmpty) {
+                  await homeController.getRecipesByPrepTime(int.parse(value));
+                }
+                else {
+                  await homeController.getAllRecipes();
+                }
+                setState(() {});
+                },
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Filter by preptime',
+              ),
+            ),
+          ),
+        )
         ],
       ),
     );
@@ -116,7 +141,7 @@ class _FilterButtonState extends State<FilterButton> {
         homeController.getAllCategories();
         homeController1.categoryFilters.clear();
         showPopover(context: context, bodyBuilder: (context)=> Container(
-          height: 180,
+          height: 250,
           width: 370,
           child: FilterCategoriesChip(),
 
