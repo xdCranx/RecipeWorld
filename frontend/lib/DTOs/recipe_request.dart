@@ -1,9 +1,11 @@
+import 'package:tuple/tuple.dart';
+
 class RecipeRequest {
   final String userId;
   final int categoryId;
   final String title;
   final String description;
-  final List<Map<String, dynamic>> ingredients;
+  final List<Tuple2<int, int>> ingredients;
   //first is id and second is quantity
   final int prepTime;
 
@@ -22,7 +24,7 @@ class RecipeRequest {
       'categoryId': categoryId,
       'title': title,
       'description': description,
-      'ingredients': ingredients,
+      'ingredients': ingredients.map((tuple) => {'first': tuple.item1, 'second': tuple.item2}).toList(),
       'prepTime': prepTime,
     };
   }

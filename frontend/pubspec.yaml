@@ -38,6 +38,7 @@ dependencies:
   get: ^4.6.1
   http: ^0.13.3
   popover: ^0.2.8+2
+  tuple:
 
 dev_dependencies:
   flutter_test:

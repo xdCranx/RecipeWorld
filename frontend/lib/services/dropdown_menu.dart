@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:popover/popover.dart';
+import 'package:tuple/tuple.dart';
 import '../controllers/add_recipe_controller.dart';
 
 class PopupMenu extends StatelessWidget {
@@ -31,6 +32,7 @@ class PopupMenu extends StatelessWidget {
                               onPressed: () {
                                 addRecipeController
                                     .updateIngredientLists(ingredient);
+                                addRecipeController.listOfIngredientAndQuantities.add(Tuple2(ingredient.id, 0));
                               },
                               child: Text(ingredient.name),
                             ),

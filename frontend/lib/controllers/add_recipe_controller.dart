@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:recipe_world2/DTOs/category_dto.dart';
 import 'package:recipe_world2/DTOs/ingredient.dart';
+import 'package:tuple/tuple.dart';
 
 import '../DTOs/recipe_request.dart';
 
@@ -11,7 +13,9 @@ class AddRecipeController extends GetxController {
   RxList<Ingredient> listOfIngredients = <Ingredient>[].obs;
   RxList<CategoryDTO> listOfCategories = <CategoryDTO>[].obs;
   RxList<Ingredient> listOfAddedIngredients = <Ingredient>[].obs;
-
+  CategoryDTO? chosenCategory;
+  RxList<Tuple2<int, int>> listOfIngredientAndQuantities =
+      <Tuple2<int, int>>[].obs;
 
   late String apiUrl = Platform.isAndroid
       ? "http://10.0.2.2:8080/api"
@@ -30,8 +34,9 @@ class AddRecipeController extends GetxController {
 
       if (response.statusCode == 200) {
         List<dynamic> ingredientsJsonList = jsonDecode(response.body);
-        List<Ingredient> ingredients = ingredientsJsonList.map((json) =>
-            Ingredient.fromJson(json)).toList();
+        List<Ingredient> ingredients = ingredientsJsonList
+            .map((json) => Ingredient.fromJson(json))
+            .toList();
         listOfIngredients.assignAll(ingredients);
       } else {
         throw Exception("Response error:${response.body}");
@@ -49,8 +54,9 @@ class AddRecipeController extends GetxController {
 
       if (response.statusCode == 200) {
         List<dynamic> categoriesJsonList = jsonDecode(response.body);
-        List<CategoryDTO> categories = categoriesJsonList.map((json) =>
-            CategoryDTO.fromJson(json)).toList();
+        List<CategoryDTO> categories = categoriesJsonList
+            .map((json) => CategoryDTO.fromJson(json))
+            .toList();
         listOfCategories.assignAll(categories);
       } else {
         throw Exception("Response error:${response.body}");
@@ -65,7 +71,7 @@ class AddRecipeController extends GetxController {
     required int categoryId,
     required String title,
     required String description,
-    required List<Map<String, dynamic>> ingredients,
+    required List<Tuple2<int, int>> ingredients,
     required int prepTime,
   }) async {
     try {
@@ -80,7 +86,6 @@ class AddRecipeController extends GetxController {
 
       Map<String, dynamic> requestBody = recipeRequest.toJson();
 
-
       final response = await http.post(
         Uri.parse('$apiUrl/recipe'),
         headers: {'Content-Type': 'application/json'},
@@ -89,18 +94,57 @@ class AddRecipeController extends GetxController {
 
       if (response.statusCode == 200) {
         print('Recipe added successfully!');
+        Get.close(1);
+        Get.snackbar(
+          "Yay!",
+          "Your recipe has been added",
+          snackPosition: SnackPosition.TOP,
+          colorText: Colors.grey[200],
+          backgroundColor: Colors.grey[400],
+          backgroundGradient: LinearGradient(
+            colors: [
+              Colors.green.shade500.withOpacity(0.5),
+              Colors.green,
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        );
       } else {
-        print('Error adding recipe: ${response.statusCode}');
+        final errorMessage =
+            jsonDecode(response.body)['message'];
+        Get.snackbar(
+          "Error",
+          errorMessage,
+          snackPosition: SnackPosition.TOP,
+          colorText: Colors.grey[200],
+          backgroundColor: Colors.grey[400],
+          backgroundGradient: LinearGradient(
+            colors: [Colors.purple.withOpacity(0.7), Colors.purple.shade900],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        );
       }
     } catch (e) {
-
       print('Error: $e');
     }
   }
 
-  void updateIngredientLists(Ingredient ingredient){
+  void updateIngredientLists(Ingredient ingredient) {
     listOfIngredients.remove(ingredient);
     listOfAddedIngredients.add(ingredient);
   }
 
+  void updateIngredientQuantities(int ingredientId, int quantity) {
+    int existingIndex = listOfIngredientAndQuantities.indexWhere(
+      (tuple) => tuple.item1 == ingredientId,
+    );
+    if (existingIndex != -1) {
+      listOfIngredientAndQuantities[existingIndex] =
+          Tuple2(ingredientId, quantity);
+    } else {
+      listOfIngredientAndQuantities.add(Tuple2(ingredientId, quantity));
+    }
+  }
 }

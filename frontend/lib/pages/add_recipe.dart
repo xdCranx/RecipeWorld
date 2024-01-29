@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:recipe_world2/DTOs/category_dto.dart';
 import 'package:recipe_world2/controllers/add_recipe_controller.dart';
+import 'package:recipe_world2/controllers/user_controller.dart';
 
 import '../services/dropdown_menu.dart';
 import '../services/ingredient_list.dart';
@@ -19,8 +21,8 @@ class _AddRecipePageState extends State<AddRecipePage> {
   final TextEditingController recipeNameController = TextEditingController();
   final TextEditingController recipeDescriptionController =
       TextEditingController();
-
-  CategoryDTO? _chosenCategory;
+  final TextEditingController recipePrepTimeController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -74,97 +76,144 @@ class _AddRecipePageState extends State<AddRecipePage> {
                 ),
               ),
               const SizedBox(height: 20),
-              Container(
-                width: 180,
-                height: 65,
-                // height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(20.0),
-                  border: Border.all(
-                    color: Colors.transparent,
-                    width: 5,
-                  ),
-                ),
-                child: Obx(() {
-                  return DropdownButton<CategoryDTO>(
-                    value: _chosenCategory,
-                    dropdownColor: Colors.purple.withAlpha(150),
-                    elevation: 9,
-                    underline: Container(
-                      height: 0,
-                      color: Colors.purple.withOpacity(0.5),
-                    ),
-                    borderRadius: BorderRadius.circular(30.0),
-                    items: addRecipeController.listOfCategories
-                        .map<DropdownMenuItem<CategoryDTO>>(
-                            (CategoryDTO category) {
-                      return DropdownMenuItem<CategoryDTO>(
-                          value: category,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 3.0),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: 230,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(20.0),
+                        border: Border.all(
+                          color: Colors.transparent,
+                          width: 5,
+                        ),
+                      ),
+                      child: Obx(() {
+                        return DropdownButton<CategoryDTO>(
+                          value: addRecipeController.chosenCategory,
+                          dropdownColor: Colors.purple.withAlpha(150),
+                          elevation: 9,
+                          underline: Container(
+                            height: 0,
+                            color: Colors.purple.withOpacity(0.5),
+                          ),
+                          borderRadius: BorderRadius.circular(30.0),
+                          items: addRecipeController.listOfCategories
+                              .map<DropdownMenuItem<CategoryDTO>>(
+                                  (CategoryDTO category) {
+                            return DropdownMenuItem<CategoryDTO>(
+                                value: category,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 3.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.purple.shade200,
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        border: Border.all(
+                                            color: Colors.purple.shade900,
+                                            width: 3)),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      category.name.toUpperCase(),
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ));
+                          }).toList(),
+                          onChanged: (CategoryDTO? newValue) {
+                            setState(() {
+                              addRecipeController.chosenCategory = newValue;
+                            });
+                          },
+                          hint: Material(
+                            elevation: 8,
+                            borderRadius: BorderRadius.circular(20.0),
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: Colors.purple.shade200,
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  border: Border.all(
-                                      color: Colors.purple.shade900, width: 3)),
-                              alignment: Alignment.center,
-                              child: Text(
-                                category.name.toUpperCase(),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                                border: Border.all(
+                                    color: Colors.purple.shade900, width: 2.5),
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Choose category",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),
-                          ));
-                    }).toList(),
-                    onChanged: (CategoryDTO? newValue) {
-                      setState(() {
-                        _chosenCategory = newValue;
-                      });
-                    },
-                    hint: Material(
-                      elevation: 8,
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Container(
-                        width: 200,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.purple.shade900,
-                            width: 2.5
                           ),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Choose category",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.grey[600],
+                          icon: const SizedBox.shrink(),
+                          isExpanded: true,
+                          alignment: Alignment.center,
+                        );
+                      }),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: 50,
+                      child: Material(
+                        elevation: 10,
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                          ],
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          controller: recipePrepTimeController,
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.purple[900]!,
+                                width: 2.5,
+                              ), // Border color when the TextField is not focused
+                              borderRadius: BorderRadius.circular(20.0),
+                              gapPadding: 5,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.purple[900]!,
+                                  width:
+                                      2.5), // Border color when the TextField is focused
+                              borderRadius: BorderRadius.circular(20.0),
+                              gapPadding: 5,
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 17, vertical: 17),
+                            labelText: 'Prep time [m]',
+                            labelStyle: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w600),
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.bold),
+                            floatingLabelStyle: TextStyle(
+                                fontSize: 20, color: Colors.purple[800]),
+                            // hintText: 'Enter recipe prep time',
+                            hintStyle: TextStyle(
+                                fontSize: 18, color: Colors.grey[400]),
                           ),
                         ),
                       ),
                     ),
-                    icon: const SizedBox.shrink(),
-                    isExpanded: true,
-                    alignment: Alignment.center,
-                  );
-                }),
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               PopupMenu(),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Material(
                 elevation: 5, // Set the elevation for the shadow effect
                 borderRadius: BorderRadius.circular(20.0),
@@ -238,7 +287,32 @@ class _AddRecipePageState extends State<AddRecipePage> {
                 borderRadius: BorderRadius.circular(25.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.close(1);
+                    try {
+                      addRecipeController.addRecipe(
+                          userId: Get.find<UserController>().user.id,
+                          categoryId: addRecipeController.chosenCategory!.id,
+                          title: recipeNameController.text,
+                          description: recipeDescriptionController.text,
+                          ingredients:
+                              addRecipeController.listOfIngredientAndQuantities,
+                          prepTime: int.parse(recipePrepTimeController.text));
+                    } catch (e) {
+                      Get.snackbar(
+                        "Invalid action",
+                        "All fields must be filled",
+                        snackPosition: SnackPosition.TOP,
+                        colorText: Colors.grey[200],
+                        backgroundColor: Colors.grey[400],
+                        backgroundGradient: LinearGradient(
+                          colors: [
+                            Colors.purple.withOpacity(0.7),
+                            Colors.purple.shade900
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                      );
+                    }
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(10.0),

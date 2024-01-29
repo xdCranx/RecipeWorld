@@ -49,6 +49,14 @@ class RecipeService(
             throw IllegalArgumentException("Recipe title cannot be empty")
         }
 
+        if (newRecipe.description.isBlank()) {
+            throw IllegalArgumentException("Recipe description cannot be empty")
+        }
+
+        if (newRecipe.prepTime <= 0) {
+            throw IllegalArgumentException("Prep time must be >0")
+        }
+        
         if (newRecipe.ingredients.isEmpty()) {
             throw IllegalArgumentException("Recipe must have ingredients")
         }

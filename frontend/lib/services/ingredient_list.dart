@@ -7,22 +7,27 @@ import '../DTOs/ingredient.dart';
 
 class IngredientButtons extends StatelessWidget {
   final Ingredient ingredient;
-  final AddRecipeController addRecipeController = Get.put(AddRecipeController());
+  final AddRecipeController addRecipeController =
+      Get.put(AddRecipeController());
   IngredientButtons({super.key, required this.ingredient});
+  final TextEditingController quantityController =
+      TextEditingController(text: '0');
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.fromLTRB(8, 16, 16, 4),
+      margin: const EdgeInsets.fromLTRB(16, 8, 16, 4),
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
-              side: const BorderSide(width: 0.01,color: Colors.transparent),
+              side: const BorderSide(width: 0.01, color: Colors.transparent),
               shape: const RoundedRectangleBorder()),
-          onPressed: (){
+          onPressed: () {
             addRecipeController.listOfAddedIngredients.remove(ingredient);
             addRecipeController.listOfIngredients.add(ingredient);
+            addRecipeController.listOfIngredientAndQuantities
+                .removeWhere((tuple) => tuple.item1 == ingredient.id);
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -38,23 +43,32 @@ class IngredientButtons extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: SizedBox( width:60, height:30,
-
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: SizedBox(
+                          width: 60,
+                          height: 30,
                           child: TextField(
-                            decoration: InputDecoration(
+                            style: const TextStyle(
+                              fontSize: 10,
+                            ),
+                            controller: quantityController,
+                            onSubmitted: (value) {
+                              addRecipeController.updateIngredientQuantities(
+                                  ingredient.id, int.parse(value));
+                            },
+                            decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                             ),
                           ),
                         ),
                       ),
-                      Text(ingredient.unit,style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[500],
-                      )
-                      ),
+                      Text(ingredient.unit,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[500],
+                          )),
                     ],
                   ),
                 ],
