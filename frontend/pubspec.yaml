@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.6.1
   http: ^0.13.3
+  popover: ^0.2.8+2
+  filter_list: ^1.0.2
 
 dev_dependencies:
   flutter_test:
