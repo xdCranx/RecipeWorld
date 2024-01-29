@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:popover/popover.dart';
+import 'package:recipe_world2/DTOs/recipe_dto.dart';
 import 'package:recipe_world2/controllers/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:recipe_world2/DTOs/category_dto.dart';
@@ -11,7 +12,6 @@ List<CategoryDTO> listOfCategories2 = homeController1.listOfCategories.toList();
 
 
 
-
 class FilterCategoriesChip extends StatefulWidget {
 
    FilterCategoriesChip({super.key});
@@ -19,7 +19,7 @@ class FilterCategoriesChip extends StatefulWidget {
   @override
   State<FilterCategoriesChip> createState() => _FilterCategoriesChipState();
 }
-//List<CategoryDTO> Cat= homeController.listOfCategories.toList();
+
 class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
   final HomeController homeController = Get.find<HomeController>();
 
@@ -28,8 +28,6 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -66,20 +64,26 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
                 );
               }
             }
-    ),
+         ),
           ),
-          //const SizedBox(height: 10.0),
           Text(
             'Looking for: ${filters.map(( CategoryDTO e) => e.name).join(', ')}\n',),
 
-          ElevatedButton(onPressed: (){
+          ElevatedButton(onPressed: () async{
             homeController.categoryFilters = RxList.from(filters);
-            if(homeController.categoryFilters.isNotEmpty)
-              homeController.getRecipesByCategory(homeController.categoryFilters[0]);
+            RxList <RecipeDTO> temp = <RecipeDTO>[].obs;
+
+            if(homeController.categoryFilters.isNotEmpty) {
+              for(final i in homeController.categoryFilters) {
+
+                await homeController.getRecipesByCategory(i);
+
+                temp.addAll(homeController.listOfRecipes);
+              }
+              homeController.listOfRecipes.assignAll(temp);
+            }
             else
               homeController.getAllRecipes();
-
-
 
           }, child: Text("Filter"))
         ],
@@ -90,14 +94,14 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
 
 
 
-
-
 class FilterButton extends StatefulWidget {
   FilterButton({super.key});
 
   @override
   State<FilterButton> createState() => _FilterButtonState();
 }
+
+
 
 class _FilterButtonState extends State<FilterButton> {
   _FilterButtonState();
