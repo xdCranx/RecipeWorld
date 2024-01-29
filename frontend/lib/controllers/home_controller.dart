@@ -9,6 +9,7 @@ import '../DTOs/recipe_dto.dart';
 class HomeController extends GetxController {
   RxList<RecipeDTO> listOfRecipes = <RecipeDTO>[].obs;
   RxList<CategoryDTO> listOfCategories = <CategoryDTO>[].obs;
+  RxList<CategoryDTO> categoryFilters = <CategoryDTO>[].obs;
   late String apiUrl = Platform.isAndroid
       ? "http://10.0.2.2:8080/api/recipe"
       : "http://localhost:8080/api/recipe";
@@ -75,6 +76,32 @@ class HomeController extends GetxController {
         return listOfRecipes;
       } else {
         throw Exception("Failed to fetch recipes. Status code: "
+            "${response.statusCode}.");
+      }
+    } catch(e) {
+      throw Exception("Error occurred: $e");
+    }
+  }
+
+  Future<List<RecipeDTO>> getRecipesByCategory(CategoryDTO filter) async {
+    try {
+      print("Fetching recipes by category");
+      final response = await http.get(
+          Uri.parse("$apiUrl/category/${(filter.name).toUpperCase()}")
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> recipeJsonList = jsonDecode(response.body);
+        List<RecipeDTO> recipes = recipeJsonList.map((json) =>
+            RecipeDTO.fromJson(json)).toList();
+
+        if ((recipes).isEmpty) {
+          return getRecipesByCategory(filter);
+        } else{
+          listOfRecipes = RxList(recipes);
+          return listOfRecipes;
+        }
+      } else {
+        throw Exception("Failed to fetch recipes by category. Status code: "
             "${response.statusCode}.");
       }
     } catch(e) {

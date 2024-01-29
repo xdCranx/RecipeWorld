@@ -5,24 +5,26 @@ import 'package:get/get.dart';
 import 'package:recipe_world2/DTOs/category_dto.dart';
 
 
-enum Categories { drink, breakfast, lunch, diner }
+
 HomeController homeController1 = Get.put(HomeController());
-//homeController1.getAllCategories();
 List<CategoryDTO> listOfCategories2 = homeController1.listOfCategories.toList();
 
 
 
 
 class FilterCategoriesChip extends StatefulWidget {
+  HomeController homeController;
 
-  const FilterCategoriesChip({super.key});
+   FilterCategoriesChip({super.key, required this.homeController});
 
   @override
-  State<FilterCategoriesChip> createState() => _FilterCategoriesChipState();
+  State<FilterCategoriesChip> createState() => _FilterCategoriesChipState(homeController: homeController);
 }
 //List<CategoryDTO> Cat= homeController.listOfCategories.toList();
 class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
-  final HomeController homeController = Get.put(HomeController());
+  //final HomeController homeController = Get.put(HomeController());
+  HomeController homeController;
+  _FilterCategoriesChipState({required this.homeController});
   Set<CategoryDTO> filters = <CategoryDTO>{};
 
   @override
@@ -34,28 +36,11 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
 
-          /*Wrap(
-            spacing: 5.0,
-            children: Categories.values.map((Categories exercise) {
-              return FilterChip(
-                label: Text(exercise.name),
-                selected: filters.contains(exercise),
-                onSelected: (bool selected) {
-                  setState(() {
-                    if (selected) {
-                      filters.add(exercise);
-                    } else {
-                      filters.remove(exercise);
-                    }
-                  });
-                },
-              );
-            }).toList(),
-          ),*/
           Expanded(
             child: Obx(() {
-              homeController.getAllCategories();
+
               final List<CategoryDTO> listOfCategories = homeController.listOfCategories.toList();
+              //homeController.categoryFilters.clear();
               if (listOfCategories.isEmpty) {
 
                 return const Center(child: CircularProgressIndicator());
@@ -70,8 +55,10 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
                       setState(() {
                         if (selected) {
                           filters.add(category);
+
                         } else {
                           filters.remove(category);
+
                         }
                       });
                     },
@@ -82,11 +69,18 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
             }
     ),
           ),
-          const SizedBox(height: 10.0),
+          //const SizedBox(height: 10.0),
           Text(
-            'Looking for: ${filters.map(( CategoryDTO e) => e.name).join(', ')}',
+            'Looking for: ${filters.map(( CategoryDTO e) => e.name).join(', ')}\n',),
 
-          ),
+          ElevatedButton(onPressed: (){
+            setState(() {
+              homeController.categoryFilters = RxList.from(filters);
+              homeController.getRecipesByCategory(homeController.categoryFilters[0]);
+            });
+
+
+          }, child: Text("Filter"))
         ],
       ),
     );
@@ -98,21 +92,26 @@ class _FilterCategoriesChipState extends State<FilterCategoriesChip> {
 
 
 class FilterButton extends StatefulWidget {
-
-  FilterButton({super.key});
+  HomeController homeController;
+  FilterButton({super.key, required this.homeController});
 
   @override
-  State<FilterButton> createState() => _FilterButtonState();
+  State<FilterButton> createState() => _FilterButtonState(homeController: homeController);
 }
 
 class _FilterButtonState extends State<FilterButton> {
+  HomeController homeController;
+  _FilterButtonState({required this.homeController});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        homeController.getAllCategories();
+        homeController1.categoryFilters.clear();
         showPopover(context: context, bodyBuilder: (context)=> Container(
-          height: 150,
-          child: FilterCategoriesChip(),
+          height: 180,
+          child: FilterCategoriesChip(homeController: homeController,),
 
         ));
       },
